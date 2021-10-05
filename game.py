@@ -6,7 +6,7 @@ from Player.invader import Invader
 NUMBER_OF_ROLLS = 3
 
 
-def roll_dice(dice: list) -> int:
+def dice_roll(dice: list) -> int:
     return dice[random.randrange(0, 6)]
 
 
@@ -14,34 +14,78 @@ class Game:
     def __init__(self):
         self.invader = Invader("Invader")
         self.defender = Defender("Defender")
-        self.active_player = self.defender.name
+        self.active_player = self.defender
+        self.dices = []
+
+    def update_active_player(self):
+        if self.active_player == self.defender:
+            self.defender = self.active_player
+            self.active_player = self.invader
+        else:
+            self.invader = self.active_player
+            self.active_player = self.defender
+
+    def set_dices(self):
+        self.dices.clear()
+        for _ in range(self.active_player.number_of_dices):
+            self.dices.append(dice_roll(self.active_player.dice))
+
+    def print_result(self):
+        print(f"\nSaved dices for {self.defender.name}:\n")
+        for k in self.defender.saved_dices:
+            print(k.upper())
+        print(f"\nThis results in:\nDefendpoints: {self.defender.defend_points}\nAttackpoints: {self.defender.attack_points}\n")
+        print(f"\nSaved dices for {self.invader.name}:\n")
+        for k in self.invader.saved_dices:
+            print(k.upper())
+        print(f"\nThis results in:\nDefendpoints: {self.invader.defend_points}\nAttackpoints: {self.invader.attack_points}\n")
+
+    def print_dices(self):
+        print(f"{self.active_player.name} rolling the dices...\n\nThe dices shows the following:")
+        for i in range(len(self.dices)):
+            print(f"{i + 1}. {self.dices[i]}")
 
     def dice_result(self):
-        def defender_roll():
-            for i in range(NUMBER_OF_ROLLS):
-                dice_roll = []
-                for _ in range(self.defender.number_of_dices):
-                    dice_roll.append(roll_dice(self.defender.dice))
+        for i in range(NUMBER_OF_ROLLS):
+            self.set_dices()
+            if (i + 1) == NUMBER_OF_ROLLS:
+                print("This is your last roll, now you have to keep all this dices...")
+                self.print_dices()
+                for dice in self.dices:
+                    self.active_player.saved_dices.append(dice)
+                break
+            else:
+                self.print_dices()
+                keep = input("\nDo you want to keep any? ")
 
-                if i == NUMBER_OF_ROLLS - 1:
-                    for dice in dice_roll:
-                        self.defender.dices.append(dice)
-                    break
+            if keep.lower() == "y":
+                num = input("Enter the number(s) of the dices to keep: ")
+                for j in num.split():
+                    self.active_player.saved_dices.append(self.dices[int(j) - 1])
+                self.active_player.number_of_dices -= len(num.split())
 
-                else:
-                    if self.defender.number_of_dices == 3:
-                        keep = input(f"1. {roll_dice[0]}\n2. {roll_dice[1]}\n3. {roll_dice[2]}"
-                                     f"\n\nDo you want to keep any? ")
-                    elif self.defender.number_of_dices == 2:
-                        keep = input(f"1. {roll_dice[0]}\n2. {roll_dice[1]}\n\nDo you want to keep any? ")
-                    elif self.defender.number_of_dices == 1:
-                        keep = input(f"1. {roll_dice[0]}\n\nDo you want to keep any? ")
+            if len(self.active_player.saved_dices) == 3 or self.active_player.number_of_dices == 0:
+                break
 
-                if keep.lower() == "y":
-                    num = input("Enter the number(s) of the dices to keep: ")
-                    for i in num.split():
-                        self.defender.dices.append(roll_dice[int(i) - 1])
-                    self.defender.number_of_dices -= len(self.defender.dices)
+    def process_saved_dices(self):
+        for dice in self.active_player.saved_dices:
+            if dice == "shield":
+                self.active_player.defend_points += 1
+            elif dice == "double shield":
+                self.active_player.defend_points += 2
+            elif dice == "triple shield":
+                self.active_player.defend_points += 3
+            elif dice == "sword":
+                self.active_player.attack_points += 1
+            elif dice == "double sword":
+                self.active_player.attack_points += 2
+            elif dice == "triple sword":
+                self.active_player.attack_points += 3
+            elif dice == "draw card":
+                pass
 
-                if len(self.defender.dices) == 3 or self.defender.number_of_dices == 0:
-                    break
+    def win(self):
+        if self.invader.attack_points > self.defender.defend_points:
+            print(f"{self.invader.name} WINS!")
+        else:
+            print(f"{self.defender.name} WINS!")
