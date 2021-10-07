@@ -5,7 +5,7 @@ from game_data import invader_cards
 
 class Invader(Player):
     def __init__(self, name):
-        super().__init__(name)
+        super().__init__(name, "invader")
         self.number_of_cards = 0
         self.cards = []
 
