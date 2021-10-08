@@ -1,8 +1,7 @@
 from time import sleep
-from Player.defender import Defender
-from Player.invader import Invader
-from Player.player import Player
-from dice import Dice
+from oldfiles.defender import Defender
+from oldfiles.invader import Invader
+from oldfiles.dice import Dice
 
 
 class Game:
@@ -46,7 +45,6 @@ class Game:
     def set_player_role(self, player1: str, player2: str):
         """
         Set which part in the game player one and player will have
-        :param role: Input from the active player, what role they want to play as
         :param player1: Name of Player One
         :param player2: Name of Player Two
         :return:
