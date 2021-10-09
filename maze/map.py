@@ -1,6 +1,6 @@
 import random
 
-from newfiles.cell import Cell
+from maze.cell import Cell
 
 
 class Maze:
