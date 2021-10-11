@@ -12,10 +12,30 @@ class Game:
     def run(self):
         pass
 
-    def set_up_game(self):
-        self.maze.create_maze()
-        self.player.set_player_name(input("Please enter your name: "))
-        self.set_player_points()
+    # def set_up_game(self):
+    #     self.maze.create_maze()
+    #     self.player.set_player_name(input('Please enter your name: '))
+    #     self.set_player_points()
+
+    def print_info(self):
+        if 'lantern' not in self.player.inventory:
+            print('You\'re in a dark room and you can\'t see anything around you!\nMaybe start walking?\n')
+        else:
+            print('The torch lights your path!\nYou can go:')
+            for direction in self.maze.get_cell(*self.player.get_player_position()).walls:
+                if not self.maze.get_cell(*self.player.get_player_position()).walls[direction]:
+                    print(f'* {direction}')
+
+    def process_user_input(self):
+        command = input('>> ')
+        current_location = self.maze.get_cell(*self.player.get_player_position())
+
+        match command.lower().split():
+            case ['go', direction] if direction in current_location.walls and not current_location.walls[direction]:
+                print('You go further in the maze!\n')
+                self.player.go(direction)
+            case ['go', *bad_direction]:
+                print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
     def set_player_points(self):
         self.player.attack_points = 0
