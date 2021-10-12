@@ -15,7 +15,7 @@ class Maze:
         self.start_x, self.start_y = start_cell_x, start_cell_y
         self.maze = [[Cell(x, y) for y in range(num_of_cells_y)] for x in range(num_of_cells_x)]
 
-    def get_cell(self, x, y):
+    def get_cell(self, x: int, y: int):
         return self.maze[x][y]
 
     def write_svg(self, filename):
@@ -124,3 +124,4 @@ class Maze:
             cell_stack.append(current_cell)
             current_cell = next_cell
             created_cells += 1
+

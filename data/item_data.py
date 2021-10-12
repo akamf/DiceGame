@@ -4,21 +4,24 @@ usable_items = [
         'name': 'lantern',
         'description': 'A burning lantern with a good bit of wick left',
         'actions': ['get', 'drop', 'look'],
-        'bonus': 'the lantern lights up the dark corridor and you can finally see where to go!'
+        'bonus': 'the lantern lights up the dark corridor and you can finally see your surroundings!',
+        'position': None
     },
     {
         'id': 2,
         'name': 'two-handed sword',
         'description': 'A well crafted sword. A dragon is seen on it\'s blade',
         'actions': ['get', 'drop', 'look'],
-        'bonus': 'you\'ll get double attack points with this. It can\'t be paired with a shield tho!'
+        'bonus': 'you\'ll get double attack points with this. It can\'t be paired with a shield tho!',
+        'position': None
     },
     {
         'id': 3,
         'name': 'old wooden shield',
         'description': 'A round wooden shield. It\'s a wolf painted on it',
         'actions': ['get', 'drop', 'look'],
-        'bonus': 'this shield will get you extra defend points, with a minimum of 1'
+        'bonus': 'this shield will get you extra defend points, with a minimum of 1',
+        'position': None
     },
     {
         'id': 4,
@@ -26,13 +29,14 @@ usable_items = [
         'description': 'A golden key with small text engraved: "OSTIUM IN LONGITUDINEM X ET Y"\n'
                        'I wonder what that means?',
         'actions': ['get', 'drop', 'look'],
-        'bonus': 'it looks important tho...'
+        'bonus': 'it looks important tho...',
+        'position': None
     },
-    {
-        'id': 5,
-        'name': '',
-        'description': '',
-        'actions': ['get', 'drop', 'look'],
-        'bonus': ''
-    }
+    # {
+    #     'id': 5,
+    #     'name': '',
+    #     'description': '',
+    #     'actions': ['get', 'drop', 'look'],
+    #     'bonus': '',
+    # }
 ]

@@ -18,13 +18,8 @@ class Game:
     #     self.set_player_points()
 
     def print_info(self):
-        if 'lantern' not in self.player.inventory:
-            print('You\'re in a dark room and you can\'t see anything around you!\nMaybe start walking?\n')
-        else:
-            print('The torch lights your path!\nYou can go:')
-            for direction in self.maze.get_cell(*self.player.get_player_position()).walls:
-                if not self.maze.get_cell(*self.player.get_player_position()).walls[direction]:
-                    print(f'* {direction}')
+        print_lantern()
+        print_sword
 
     def process_user_input(self):
         command = input('>> ')
