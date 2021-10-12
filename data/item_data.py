@@ -1,3 +1,15 @@
+import random
+
+# This is a first test to set the items in a random position inside the maze
+# I haven't decided where to put the function, so I just test it from here
+
+# def set_item_position():
+#     for item in usable_items:
+#         x = random.randrange(0, 5)
+#         y = random.randrange(0, 5)
+#         item['position'] = (x, y)
+
+
 usable_items = [
     {
         'id': 1,
@@ -5,7 +17,7 @@ usable_items = [
         'description': 'A burning lantern with a good bit of wick left',
         'actions': ['get', 'drop', 'look'],
         'bonus': 'the lantern lights up the dark corridor and you can finally see your surroundings!',
-        'position': None
+        'position': (0, 1)
     },
     {
         'id': 2,
@@ -13,7 +25,7 @@ usable_items = [
         'description': 'A well crafted sword. A dragon is seen on it\'s blade',
         'actions': ['get', 'drop', 'look'],
         'bonus': 'you\'ll get double attack points with this. It can\'t be paired with a shield tho!',
-        'position': None
+        'position': (1, 4)
     },
     {
         'id': 3,
@@ -21,7 +33,7 @@ usable_items = [
         'description': 'A round wooden shield. It\'s a wolf painted on it',
         'actions': ['get', 'drop', 'look'],
         'bonus': 'this shield will get you extra defend points, with a minimum of 1',
-        'position': None
+        'position': (2, 1)
     },
     {
         'id': 4,
@@ -30,13 +42,6 @@ usable_items = [
                        'I wonder what that means?',
         'actions': ['get', 'drop', 'look'],
         'bonus': 'it looks important tho...',
-        'position': None
-    },
-    # {
-    #     'id': 5,
-    #     'name': '',
-    #     'description': '',
-    #     'actions': ['get', 'drop', 'look'],
-    #     'bonus': '',
-    # }
+        'position': (3, 3)
+    }
 ]

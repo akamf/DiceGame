@@ -13,4 +13,9 @@ class Dice:
         ]
 
     def roll_dices(self, num_of_dices: int) -> list:
+        """
+        Function to simulate the dice rolls
+        :param num_of_dices: Number of dices to roll
+        :return: A list of the dices results
+        """
         return [self.dice[random.randrange(0, 6)] for _ in range(num_of_dices)]

@@ -1,5 +1,4 @@
 import random
-import game
 from data.item_data import usable_items
 
 
@@ -22,25 +21,23 @@ class Cell:
             'west': True
         }
         self.got_item = False
-        self.item = {}
+        self.item = None
 
-    def surrounded_by_walls(self):
+    def surrounded_by_walls(self) -> bool:
         return all(self.walls.values())
 
     def remove_wall(self, other_cell, wall):
+        """
+        Remove the wall between two cells
+        :param other_cell: The wall between this cell and self will be removed
+        :param wall: The wall direction to remove
+        """
         self.walls[wall] = False
         other_cell.walls[Cell.wall_pairs[wall]] = False
 
-    def set_item(self, item_id: int, position: tuple):
-        if position == (self.x, self.y):
-            for item in usable_items:
-                if item['id'] == item_id:
-                    self.item = item
-
-    # def set_item_position(self):
-    #     for item in usable_items:
-    #         x, y = random.randrange(0, 4), random.randrange(0, 4)
-    #         while game.maze.get_cell(x, y).got_item:
-    #             x, y = random.randrange(0, 4), random.randrange(0, 4)
-    #         item['maze position'] = (x, y)
-    #
+    def set_item(self):
+        """Set item to the cell with the same position, based on usable_items dict"""
+        for item in usable_items:
+            if item['position'] == (self.x, self.y):
+                self.item = item
+                self.got_item = True
