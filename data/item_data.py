@@ -1,15 +1,3 @@
-import random
-
-# This is a first test to set the items in a random position inside the maze
-# I haven't decided where to put the function, so I just test it from here
-
-# def set_item_position():
-#     for item in usable_items:
-#         x = random.randrange(0, 5)
-#         y = random.randrange(0, 5)
-#         item['position'] = (x, y)
-
-
 usable_items = [
     {
         'id': 1,

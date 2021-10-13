@@ -1,10 +1,9 @@
-import random
-from data.item_data import usable_items
+from assets.item import usable_items
 
 
 class Cell:
-    # Directions where a wall separates the cells. A wall to the north in one cell is to the south for next cell etc.
-    wall_pairs = {
+
+    WALL_SEPARATES = {
         'north': 'south',
         'south': 'north',
         'east': 'west',
@@ -33,7 +32,7 @@ class Cell:
         :param wall: The wall direction to remove
         """
         self.walls[wall] = False
-        other_cell.walls[Cell.wall_pairs[wall]] = False
+        other_cell.walls[Cell.WALL_SEPARATES[wall]] = False
 
     def set_item(self):
         """Set item to the cell with the same position, based on usable_items dict"""
