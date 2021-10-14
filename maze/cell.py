@@ -1,4 +1,4 @@
-from assets.item import usable_items
+from assets.items import usable_items
 
 
 class Cell:
@@ -20,7 +20,7 @@ class Cell:
             'west': True
         }
         self.got_item = False
-        self.item = None
+        self.item = {}
 
     def surrounded_by_walls(self) -> bool:
         return all(self.walls.values())

@@ -1,4 +1,5 @@
 import random
+from time import sleep
 
 
 class Dice:
@@ -18,4 +19,5 @@ class Dice:
         :param num_of_dices: Number of dices to roll
         :return: A list of the dices results
         """
+        sleep(2)
         return [self.dice[random.randrange(0, 6)] for _ in range(num_of_dices)]

@@ -1,4 +1,5 @@
 from assets.dice import Dice
+from assets.items import Items
 from maze.map import Maze
 from assets.actors.player import Player
 
@@ -24,10 +25,11 @@ class Game:
         self.player = Player()
         self.maze = Maze(5, 5)
         self.dice = Dice()
+        self.items = Items()
         self.set_up_game()
 
     def run(self):
-        """Main mainfiles method. Sequence of all main methods"""
+        """Main game method. Sequence of all main methods"""
         while True:
             self.print_info()
             print_player_location_in_maze(self)
@@ -40,7 +42,7 @@ class Game:
                 break
 
     def set_up_game(self):
-        """Sets up the mainfiles when it's initialized"""
+        """Sets up the game when it's initialized"""
         self.maze.create_maze()
         self.maze.write_map('maze')
         # self.player.set_actor_name(input('Please enter your name: '))  # Still uncertain if this is necessary or not
@@ -55,7 +57,7 @@ class Game:
             print('You\'re in a dark space.')
 
         if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-            print(f'In this room there is a {self.maze.get_cell(*self.player.get_actor_position()).item["name"]}')
+            print(f'In this room there is a {self.maze.get_cell(*self.player.get_actor_position()).item["label"]}')
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -69,14 +71,19 @@ class Game:
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
-            case [*invalid_command]:
-                print(f'I don\'t understand command: {" ".join(invalid_command)}')
+            case ['get', item]:
+                self.player.get_item(item, current_location)
+            case ['drop', item]:
+                self.player.drop_item(item, current_location)
+
+            case _:
+                print(f'I don\'t understand command: {command}')
 
     def set_player_stats(self):
         """Set the player attack/defend points, based on the result of the rolled dices"""
         self.player.attack_points = 0
         self.player.defend_points = 0
-        for dice in self.dice.roll_dices(3):
+        for dice in self.dice.roll_dices(4 if self.player.got_item('dice') else 3):
             print(dice)
             match dice:
                 case 'shield':
@@ -85,4 +92,3 @@ class Game:
                     self.player.attack_points += 1 * 2 if self.player.got_item('two-handed sword') else 1
                 case 'double sword':
                     self.player.attack_points += 2 * 2 if self.player.got_item('two-handed sword') else 2
-

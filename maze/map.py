@@ -84,9 +84,9 @@ class Maze:
         padding = 10
         height = 500
         width = int(height * aspect_ratio)  # Height and width of the maze image in pixels
-        scale_y, scale_x = height / self.num_of_cells_y, width / self.num_of_cells_x  # Scaling the maze coordinates to image coordinates
+        scale_y, scale_x = height / self.num_of_cells_y, width / self.num_of_cells_x  # Scaling the maze coordinates
 
-        with open(file_name + '.svg', 'w') as f:
+        with open('./gamemap/' + file_name + '.svg', 'w') as f:
             # SVG preamble and styles.
             print('<?xml version="1.0" encoding="utf-8"?>', file=f)
             print('<svg xmlns="http://www.w3.org/2000/svg"', file=f)
@@ -100,7 +100,8 @@ class Maze:
             print('    stroke: #000000;\n    stroke-linecap: square;', file=f)
             print('    stroke-width: 5;\n}', file=f)
             print(']]></style>\n</defs>', file=f)
-            # Draw the "South" and "East" walls of each cell, these are the "North" and "West" walls of the neighbouring cell
+            # Draw the "South" and "East" walls of each cell,
+            # these are the "North" and "West" walls of the neighbouring cell
             for x in range(self.num_of_cells_x):
                 for y in range(self.num_of_cells_y):
                     if self.get_cell(x, y).walls['south']:
