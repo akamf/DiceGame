@@ -2,7 +2,7 @@ import random
 from data.item_data import usable_items
 
 
-class Item:
+class Items:
     def __init__(self, **item):
         self.set_item_position()
         self.__dict__ = item
