@@ -1,4 +1,5 @@
 from assets.actors.actor import Actor
+from assets.inventory import Inventory
 
 DIRECTIONS = {
     'north': (0, -1),
@@ -11,31 +12,30 @@ DIRECTIONS = {
 class Player(Actor):
     def __init__(self):
         super().__init__('', (0, 0), 0, 0, 10)
-        self.inventory = []
+        self.inventory = Inventory()
         self.in_battle = False
 
-    def got_item(self, label: str) -> bool:
+    def got_item(self, item_label: str) -> bool:
         """
-        Search player inventory for a certain item
-        :param label: The item-label to search for
+        Search in player inventory for a certain item
+        :param item_label: The label for the item to search for
         :return: True if the item is found, else False
         """
-        for item in self.inventory:
-            if label in item['label']:
-                match label:
+        for item in self.inventory.inventory:
+            if item_label == item['label']:
+                match item_label:
                     case 'lantern':
                         return True
-                    case 'two-handed sword':
+                    case 'sword':
                         return True
-                    case 'old wooden shield':
+                    case 'shield':
                         return True
-                    case 'golden key':
+                    case 'key':
                         return True
-            return False
+        return False
 
     def go(self, direction: str):
-        self.position.x_coord += DIRECTIONS[direction][0]
-        self.position.y_coord += DIRECTIONS[direction][1]
+        self.set_actor_position(DIRECTIONS[direction])
 
     def get_item(self, item_label: str, current_location):
         item = None
@@ -48,7 +48,7 @@ class Player(Actor):
 
                 current_location.item = None
                 current_location.got_item = False
-                self.inventory.append(item)
+                self.inventory.inventory.append(item)
             else:
                 print(f'You can\'t pick up {item_label}')
         else:
@@ -57,7 +57,7 @@ class Player(Actor):
     def drop_item(self, item_label: str, current_location):
         item = None
         if not current_location.got_item:
-            for item_to_find in self.inventory:
+            for item_to_find in self.inventory.inventory:
                 if item_label == item_to_find['label']:
                     item = item_to_find
                     break
@@ -65,7 +65,7 @@ class Player(Actor):
             if item:
                 if 'drop' in item['actions']:
                     print(f'You drop the {item_label}')
-                    self.inventory.remove(item)
+                    self.inventory.inventory.remove(item)
                     current_location.item = item
                     current_location.got_item = True
                 else:
@@ -75,3 +75,11 @@ class Player(Actor):
 
         else:
             print(f'This room isn\'t empty! You can\'t the {item_label}')
+
+    def print_inventory(self):
+        if len(self.inventory.inventory) == 0:
+            print('Yor inventory is empty')
+        else:
+            print(f'\tINVENTORY')
+            for item in sorted(self.inventory.inventory, key=lambda i: i['label']):
+                print(f'* {item["label"]}')

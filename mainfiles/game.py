@@ -1,3 +1,4 @@
+from assets.actors.enemy import Enemy
 from assets.dice import Dice
 from assets.items import Items
 from maze.map import Maze
@@ -23,9 +24,10 @@ def print_player_location_in_maze(game):
 class Game:
     def __init__(self):
         self.player = Player()
+        self.enemy = Enemy()
         self.maze = Maze(5, 5)
         self.dice = Dice()
-        self.items = Items()
+        self.items = None
         self.set_up_game()
 
     def run(self):
@@ -35,14 +37,14 @@ class Game:
             print_player_location_in_maze(self)
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
-            # if self.player.in_battle:
-            #     self.set_player_stats()
+            self.engaged_battle()
             if self.player.get_actor_position() == (4, 4):
                 print('Winner!')
                 break
 
     def set_up_game(self):
         """Sets up the game when it's initialized"""
+        # self.items = Items()
         self.maze.create_maze()
         self.maze.write_map('maze')
         # self.player.set_actor_name(input('Please enter your name: '))  # Still uncertain if this is necessary or not
@@ -76,6 +78,9 @@ class Game:
             case ['drop', item]:
                 self.player.drop_item(item, current_location)
 
+            case ['inventory']:
+                self.player.print_inventory()
+
             case _:
                 print(f'I don\'t understand command: {command}')
 
@@ -83,12 +88,39 @@ class Game:
         """Set the player attack/defend points, based on the result of the rolled dices"""
         self.player.attack_points = 0
         self.player.defend_points = 0
+        print('The dices shows:')
         for dice in self.dice.roll_dices(4 if self.player.got_item('dice') else 3):
-            print(dice)
+            print(f'* {dice}')
             match dice:
                 case 'shield':
-                    self.player.defend_points += 1 * 2 if self.player.got_item('old wooden shield') else 1
+                    self.player.defend_points += 1 * 2 if self.player.got_item('shield') else 1
                 case 'sword':
-                    self.player.attack_points += 1 * 2 if self.player.got_item('two-handed sword') else 1
+                    self.player.attack_points += 1 * 2 if self.player.got_item('sword') else 1
                 case 'double sword':
-                    self.player.attack_points += 2 * 2 if self.player.got_item('two-handed sword') else 2
+                    self.player.attack_points += 2 * 2 if self.player.got_item('sword') else 2
+
+    def engaged_battle(self):
+        if self.player.get_actor_position() == self.enemy.get_actor_position():
+            print(f'You bumped into a {self.enemy.get_actor_name()}\nPREPARE TO FIGHT!')
+            while self.enemy.health_points > 0 and self.player.health_points > 0:
+                command = input('>> ')
+                match command.lower():
+                    case 'roll':
+                        self.set_player_stats()
+                    case ['use', item]:
+                        pass
+                self.battle()
+
+    def battle(self):
+        if self.player.got_item('shield') and self.player.defend_points > 0:
+            print(f'Your {self.player.inventory.get_inventory_item("shield")} blocks {self.player.defend_points}'
+                  f' in the attack!')
+            self.player.health_points += self.player.defend_points
+
+        print(f'P-AP\tP-HP\tE-AP\tE-HP\n{self.player.attack_points}\t{self.player.health_points}\t'
+              f'{self.enemy.attack_points}\t{self.enemy.health_points}')
+        self.player.health_points -= self.enemy.attack_points
+        self.enemy.health_points -= self.player.attack_points
+        print(f'{self.enemy.get_actor_name()} strikes!\nYou lose {self.enemy.attack_points} hp!')
+        print(f'You strike the enemy with {self.player.attack_points} points!')
+        print(f'Your HP\tEnemy HP\n{self.player.health_points}\t{self.enemy.health_points}')

@@ -1,6 +1,6 @@
 import random
 from assets.dice import Dice
-from assets.items import Item
+from assets.items import Items
 from mainfiles.game import Game
 from maze.cell import Cell
 from maze.map import Maze
@@ -12,40 +12,44 @@ from assets.actors.actor import Actor
 """
 
 
-# def get_item(item_name, current_cell, player):
-#     found_item = None
-#     for item in current_cell.item:
-#         if item.name == item_name:
-#             found_item = item
-#             break
-#     if found_item:
-#         if 'get' in found_item.actions:
-#             print(f'You pick up the {item_name}!')
-#             current_cell.item = None
-#             current_cell.got_item = False
-#             player.inventory.append(found_item)
-#
-#
-# def drop_item(item, current_cell):
-#     found_item = None
-#     for item in current_cell.item:
-#         if item.name == item_name:
-#             found_item = item
-#             break
-#     if found_item:
-#         if 'get' in found_item.actions:
-#             print(f'You pick up the {item_name}!')
-#             current_cell.item = None
-#             current_cell.got_item = False
-#             player.inventory.append(found_item)
-
-
 def main():
-    item = Item()
-    print()
-    for item in usable_items:
-        print(item['name'], *item['position'])
+    inventory = []
 
+    # def print_chest():
+    #     ids = []
+    #     for item in usable_items:
+    #         if item['container']:
+    #             for i in item['contains']:
+    #                 ids.append(i)
+    #     for item in usable_items:
+    #         for id in ids:
+    #             if item['id'] == id:
+    #                 print(f'* {item["name"]}')
+    #
+    # def open_chest():
+    #     chest_open = True
+    #     while chest_open:
+    #         print_chest()
+    #         pick = input("What do you want pick up:")
+    #
+    #         if pick == 'none':
+    #             chest_open = False
+    #         else:
+    #             for item in usable_items:
+    #                 if item['name'] == pick:
+    #                     pick = item['id']
+    #
+    #             for item in usable_items:
+    #                 if item['container']:
+    #                     for id in item['contains']:
+    #                         if id == pick:
+    #                             item['contains'].remove(id)
+    #                             inventory.append(id)
+    #                             if len(item['contains']) == 0:
+    #                                 item['visible'] = False
+    #                                 chest_open = False
+    #                                 print('It\'s gone!')
+    #
 
 if __name__ == '__main__':
     main()
