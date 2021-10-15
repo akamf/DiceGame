@@ -12,12 +12,12 @@ class Actor:
     def get_actor_name(self) -> str:
         return self.__name
 
-    def get_actor_position(self) -> tuple:
-        return self.__position.x_coord, self.__position.y_coord
-
     def set_actor_position(self, new_position: tuple):
         self.__position.x_coord += new_position[0]
         self.__position.y_coord += new_position[1]
+
+    def get_actor_position(self) -> tuple:
+        return self.__position.x_coord, self.__position.y_coord
 
 
 class ActorPosition:

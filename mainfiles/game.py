@@ -33,11 +33,11 @@ class Game:
     def run(self):
         """Main game method. Sequence of all main methods"""
         while True:
-            self.print_info()
+            self.print_maze_info()
             print_player_location_in_maze(self)
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
-            self.engaged_battle()
+            self.engaged_in_battle()
             if self.player.get_actor_position() == (4, 4):
                 print('Winner!')
                 break
@@ -48,18 +48,6 @@ class Game:
         self.maze.create_maze()
         self.maze.write_map('maze')
         # self.player.set_actor_name(input('Please enter your name: '))  # Still uncertain if this is necessary or not
-
-    def print_info(self):
-        if self.player.got_item('lantern'):
-            print('You\'ve got the lantern. It lights up your surroundings.\nYou can go: ')
-            for direction in self.maze.get_cell(*self.player.get_actor_position()).walls:
-                if not self.maze.get_cell(*self.player.get_actor_position()).walls[direction]:
-                    print(f'* {direction}')
-        else:
-            print('You\'re in a dark space.')
-
-        if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-            print(f'In this room there is a {self.maze.get_cell(*self.player.get_actor_position()).item["label"]}')
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -99,7 +87,7 @@ class Game:
                 case 'double sword':
                     self.player.attack_points += 2 * 2 if self.player.got_item('sword') else 2
 
-    def engaged_battle(self):
+    def engaged_in_battle(self):
         if self.player.get_actor_position() == self.enemy.get_actor_position():
             print(f'You bumped into a {self.enemy.get_actor_name()}\nPREPARE TO FIGHT!')
             while self.enemy.health_points > 0 and self.player.health_points > 0:
@@ -109,18 +97,55 @@ class Game:
                         self.set_player_stats()
                     case ['use', item]:
                         pass
+                    case ['run', direction]:
+                        pass
                 self.battle()
 
     def battle(self):
-        if self.player.got_item('shield') and self.player.defend_points > 0:
-            print(f'Your {self.player.inventory.get_inventory_item("shield")} blocks {self.player.defend_points}'
-                  f' in the attack!')
-            self.player.health_points += self.player.defend_points
 
-        print(f'P-AP\tP-HP\tE-AP\tE-HP\n{self.player.attack_points}\t{self.player.health_points}\t'
-              f'{self.enemy.attack_points}\t{self.enemy.health_points}')
-        self.player.health_points -= self.enemy.attack_points
+        self.battle_outcome()
+        print(f'You strike the enemy with {self.player.attack_points} attack points! The enemy has '
+              f'{self.enemy.health_points} health points remaining')
+
+        if self.enemy.health_points <= 0:
+            print(f'You defeated {self.enemy.get_actor_name()}!')
+
+        print(f'The {self.enemy.get_actor_name()} strikes back!\nIt attacks with {self.enemy.attack_points} attack points!')
+        if self.player.defend_points > 0:
+            print(f'You block {self.player.defend_points} points from the attack')
+            if self.player.got_item('shield'):
+                print(f'Thanks to your {self.player.inventory.get_inventory_item("shield")}'
+                      f' you were able to block extra!')
+
+        if self.player.health_points <= 0:
+            print(f'The {self.enemy.get_actor_name()} defeated you!\nGAME OVER!')
+            quit()
+
+    def battle_outcome(self):
         self.enemy.health_points -= self.player.attack_points
-        print(f'{self.enemy.get_actor_name()} strikes!\nYou lose {self.enemy.attack_points} hp!')
-        print(f'You strike the enemy with {self.player.attack_points} points!')
-        print(f'Your HP\tEnemy HP\n{self.player.health_points}\t{self.enemy.health_points}')
+        if self.enemy.health_points < 0:
+            self.enemy.health_points = 0
+
+        self.player.health_points += self.player.defend_points
+        self.player.health_points -= self.enemy.attack_points
+
+        if self.player.health_points < 0:
+            self.player.health_points = 0
+
+    def print_maze_info(self):
+        if self.player.got_item('lantern'):
+            print('You\'ve got the lantern. It lights up your surroundings.\nYou can go: ')
+            for direction in self.maze.get_cell(*self.player.get_actor_position()).walls:
+                if not self.maze.get_cell(*self.player.get_actor_position()).walls[direction]:
+                    print(f'* {direction}')
+        else:
+            print('You\'re in a dark space.')
+
+        if self.maze.get_cell(*self.player.get_actor_position()).got_item:
+            print(f'In this room there is a {self.maze.get_cell(*self.player.get_actor_position()).item["label"]}')
+
+    def print_battle_stats(self):
+        print(f'\n{self.player.get_actor_name().upper()} STATS:\nAP - {self.player.attack_points}\n'
+              f'HP - {self.player.health_points}\nDP - {self.player.defend_points}\n'
+              f'\n{self.enemy.get_actor_name().upper()} Stats:\nAP - {self.enemy.attack_points}\n'
+              f'HP - {self.enemy.health_points}\n')

@@ -11,7 +11,7 @@ DIRECTIONS = {
 
 class Player(Actor):
     def __init__(self):
-        super().__init__('', (0, 0), 0, 0, 10)
+        super().__init__('player', (0, 0), 0, 0, 10)
         self.inventory = Inventory()
         self.in_battle = False
 
@@ -35,9 +35,15 @@ class Player(Actor):
         return False
 
     def go(self, direction: str):
+        """Update player position, based on a constant value from DIRECTIONS"""
         self.set_actor_position(DIRECTIONS[direction])
 
     def get_item(self, item_label: str, current_location):
+        """
+        Get an item from the current player location
+        :param item_label: The item to get
+        :param current_location: The players current location
+        """
         item = None
         if item_label == current_location.item['label']:
             item = current_location.item
@@ -55,6 +61,12 @@ class Player(Actor):
             print(f'There is no {item_label} here')
 
     def drop_item(self, item_label: str, current_location):
+        """
+        Drop an item from the players inventory
+        :param item_label: The item to drop
+        :param current_location: The players current location
+        :return:
+        """
         item = None
         if not current_location.got_item:
             for item_to_find in self.inventory.inventory:
@@ -77,6 +89,7 @@ class Player(Actor):
             print(f'This room isn\'t empty! You can\'t the {item_label}')
 
     def print_inventory(self):
+        """Display the players inventory"""
         if len(self.inventory.inventory) == 0:
             print('Yor inventory is empty')
         else:
