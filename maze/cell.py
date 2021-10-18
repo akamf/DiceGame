@@ -1,4 +1,4 @@
-from assets.items import usable_items
+from data.item_data import key_items, enviroment_items
 
 
 class Cell:
@@ -36,7 +36,12 @@ class Cell:
 
     def set_item(self):
         """Set item to the cell with the same position, based on usable_items dict"""
-        for item in usable_items:
+        for item in key_items:
+            if item['position'] == (self.x, self.y):
+                self.item = item
+                self.got_item = True
+
+        for item in enviroment_items:
             if item['position'] == (self.x, self.y):
                 self.item = item
                 self.got_item = True

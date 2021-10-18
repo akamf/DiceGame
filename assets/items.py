@@ -1,5 +1,6 @@
 import random
-from data.item_data import usable_items
+
+from data.item_data import key_items, enviroment_items
 
 
 class Items:
@@ -10,13 +11,14 @@ class Items:
     @staticmethod
     def set_item_position():
         positions = []
-        for i in range(len(usable_items)):
+        for i in range(len(key_items)):
             (x, y) = (random.randrange(0, 5), random.randrange(0, 5))
-            while (x, y) in positions:
+            while (x, y) in positions or (x, y) == (4, 4):
                 (x, y) = (random.randrange(0, 5), random.randrange(0, 5))
             positions.append((x, y))
 
         cnt = 0
-        for item in usable_items:
+        for item in key_items:
             item['position'] = positions[cnt]
             cnt += 1
+

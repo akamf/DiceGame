@@ -4,7 +4,7 @@ from assets.items import Items
 from mainfiles.game import Game
 from maze.cell import Cell
 from maze.map import Maze
-from data.item_data import usable_items
+from data.item_data import enviroment_items
 from assets.actors.actor import Actor
 
 """
@@ -12,8 +12,23 @@ from assets.actors.actor import Actor
 """
 
 
+def open_chest(chest: dict):
+    print(f'The {chest["label"]} contains: {chest["contains"]}')
+
+
+def chest(game):
+    if game.maze.get_cell(game.player.get_actor_position()).got_item() \
+            and game.maze.get_cell(game.player.get_actor_position()).item['label'] == 'chest':
+        command = input('What to do: ')
+
+        if command == 'open':
+            open_chest(game.maze.get_cell(game.player.get_actor_position()).item)
+
+
 def main():
-    inventory = []
+    game = Game()
+
+    game.run()
 
 
 if __name__ == '__main__':

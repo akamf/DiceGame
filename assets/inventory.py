@@ -11,7 +11,27 @@ class Inventory:
                 return item['description']
 
     def inventory_full(self) -> bool:
+        """Check whether or not the inventory is full"""
         if len(self.inventory) >= self.max_limit:
             print('Your inventory is full.')
             return True
+        return False
+
+    def item_in_inventory(self, item_label: str) -> bool:
+        """
+        Search in player inventory for a certain item
+        :param item_label: The label for the item to search for
+        :return: True if the item is found, else False
+        """
+        for item in self.inventory:
+            if item_label == item['label']:
+                match item_label:
+                    case 'lantern':
+                        return True
+                    case 'sword':
+                        return True
+                    case 'shield':
+                        return True
+                    case 'key':
+                        return True
         return False

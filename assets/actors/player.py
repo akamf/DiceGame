@@ -1,5 +1,6 @@
 from assets.actors.actor import Actor
 from assets.inventory import Inventory
+from data.item_data import weapons_and_armors
 from maze.map import DIRECTIONS
 
 
@@ -9,39 +10,28 @@ class Player(Actor):
         self.inventory = Inventory()
         self.in_battle = False
 
-    def got_item(self, item_label: str) -> bool:
-        """
-        Search in player inventory for a certain item
-        :param item_label: The label for the item to search for
-        :return: True if the item is found, else False
-        """
-        for item in self.inventory.inventory:
-            if item_label == item['label']:
-                match item_label:
-                    case 'lantern':
-                        return True
-                    case 'sword':
-                        return True
-                    case 'shield':
-                        return True
-                    case 'key':
-                        return True
-        return False
-
     def go(self, direction: str):
         """Update player position, based on a constant value from DIRECTIONS"""
         for value in DIRECTIONS:
             if value[0] == direction:
                 self.set_actor_position(value[1])
 
-    def get_item(self, item_label: str, current_location):
+    def get_item(self, item_label: str, current_location, chest=None):
         """
         Get an item from the current player location
         :param item_label: The item to get
         :param current_location: The players current location
+        :param chest: Chest to get item from, None as default
         """
         item = None
-        if item_label == current_location.item['label']:
+
+        if chest:
+            if item_label in chest['contains']:
+                for i in weapons_and_armors:
+                    if i['label'] == item_label:
+                        item = i
+
+        elif item_label == current_location.item['label']:
             item = current_location.item
 
         if item:
@@ -53,7 +43,7 @@ class Player(Actor):
                 current_location.got_item = False
                 self.inventory.inventory.append(item)
             else:
-                print(f'You can\'t pick up {item_label}')
+                print(f'You can\'t pick up {item_label} before you drop something from your inventory')
         else:
             print(f'There is no {item_label} here')
 
@@ -62,7 +52,6 @@ class Player(Actor):
         Drop an item from the players inventory
         :param item_label: The item to drop
         :param current_location: The players current location
-        :return:
         """
         item = None
         if not current_location.got_item:
