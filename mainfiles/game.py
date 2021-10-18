@@ -4,13 +4,6 @@ from assets.items import Items
 from maze.map import Maze
 from assets.actors.player import Player
 
-DIRECTIONS = {
-    'north': (0, -1),
-    'south': (0, 1),
-    'east': (1, 0),
-    'west': (-1, 0)
-}
-
 
 def print_player_location_in_maze(game):
     """
@@ -25,7 +18,7 @@ class Game:
     def __init__(self):
         self.player = Player()
         self.enemy = Enemy()
-        self.maze = Maze(5, 5)
+        self.maze = Maze(2, 2)
         self.dice = Dice()
         self.items = None
         self.set_up_game()
@@ -38,9 +31,9 @@ class Game:
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
             self.engaged_in_battle()
-            if self.player.get_actor_position() == (4, 4):
-                print('Winner!')
-                break
+            # if self.player.get_actor_position() == (4, 4):
+            #     print('Winner!')
+            #     break
 
     def set_up_game(self):
         """Sets up the game when it's initialized"""

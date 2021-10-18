@@ -4,7 +4,7 @@ from assets.actors.actor import Actor
 
 class Enemy(Actor):
     def __init__(self):
-        super().__init__('skeleton', (0, 1), 3, 0, 5)
+        super().__init__('skeleton', (None, None), 3, 0, 5)
         self.level = 1
         self.enemies = []
 

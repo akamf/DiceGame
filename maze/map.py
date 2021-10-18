@@ -2,6 +2,13 @@ import random
 
 from maze.cell import Cell
 
+DIRECTIONS = [
+    ('north', (0, -1)),
+    ('south', (0, 1)),
+    ('east', (1, 0)),
+    ('west', (-1, 0))
+]
+
 
 class Maze:
     def __init__(self, num_of_cells_x, num_of_cells_y, start_cell_x=0, start_cell_y=0):
@@ -25,16 +32,10 @@ class Maze:
         :param cell: Current cell
         :return: A list of all valid neighbours
         """
-        delta = [
-            ('west', (-1, 0)),
-            ('east', (1, 0)),
-            ('south', (0, 1)),
-            ('north', (0, -1))
-        ]
         neighbours = []
 
-        for direction, (delta_x, delta_y) in delta:
-            neighbour_x, neighbour_y = cell.x + delta_x, cell.y + delta_y
+        for direction, (direction_x, direction_y) in DIRECTIONS:
+            neighbour_x, neighbour_y = cell.x + direction_x, cell.y + direction_y
             if 0 <= neighbour_x < self.num_of_cells_x and 0 <= neighbour_y < self.num_of_cells_y:
                 neighbour = self.get_cell(neighbour_x, neighbour_y)
                 if neighbour.surrounded_by_walls():
@@ -67,6 +68,7 @@ class Maze:
             cell_stack.append(current_cell)
             current_cell = next_cell
             created_cells += 1
+        current_cell.set_item()
 
     def write_map(self, file_name: str):
         """

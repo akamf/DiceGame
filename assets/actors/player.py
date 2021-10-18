@@ -1,12 +1,6 @@
 from assets.actors.actor import Actor
 from assets.inventory import Inventory
-
-DIRECTIONS = {
-    'north': (0, -1),
-    'south': (0, 1),
-    'east': (1, 0),
-    'west': (-1, 0)
-}
+from maze.map import DIRECTIONS
 
 
 class Player(Actor):
@@ -36,7 +30,9 @@ class Player(Actor):
 
     def go(self, direction: str):
         """Update player position, based on a constant value from DIRECTIONS"""
-        self.set_actor_position(DIRECTIONS[direction])
+        for value in DIRECTIONS:
+            if value[0] == direction:
+                self.set_actor_position(value[1])
 
     def get_item(self, item_label: str, current_location):
         """
@@ -49,9 +45,10 @@ class Player(Actor):
             item = current_location.item
 
         if item:
-            if 'get' in item['actions']:
+            if 'get' not in item['actions']:
+                print(f'It seems impossible to pick up the {item["label"]}')
+            elif not self.inventory.inventory_full():
                 print(f'You pick up the {item_label}!')
-
                 current_location.item = None
                 current_location.got_item = False
                 self.inventory.inventory.append(item)
