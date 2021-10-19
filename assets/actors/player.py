@@ -18,7 +18,7 @@ class Player(Actor):
 
     def get_item(self, item_label: str, current_location, chest=None):
         """
-        Get an item from the current player location
+        Get an item from the current player location or from a chest
         :param item_label: The item to get
         :param current_location: The players current location
         :param chest: Chest to get item from, None as default
@@ -26,11 +26,7 @@ class Player(Actor):
         item = None
 
         if chest:
-            if item_label in chest['contains']:
-                for i in weapons_and_armors:
-                    if i['label'] == item_label:
-                        item = i
-
+            item = chest.get_chest_content(item_label)
         elif item_label == current_location.item['label']:
             item = current_location.item
 
@@ -39,9 +35,12 @@ class Player(Actor):
                 print(f'It seems impossible to pick up the {item["label"]}')
             elif not self.inventory.inventory_full():
                 print(f'You pick up the {item_label}!')
-                current_location.item = None
-                current_location.got_item = False
                 self.inventory.inventory.append(item)
+                if chest:
+                    chest['contains'].remove(item_label)
+                else:
+                    current_location.item = None
+                    current_location.got_item = False
             else:
                 print(f'You can\'t pick up {item_label} before you drop something from your inventory')
         else:
@@ -74,11 +73,3 @@ class Player(Actor):
         else:
             print(f'This room isn\'t empty! You can\'t the {item_label}')
 
-    def print_inventory(self):
-        """Display the players inventory"""
-        if len(self.inventory.inventory) == 0:
-            print('Yor inventory is empty')
-        else:
-            print(f'\tINVENTORY')
-            for item in sorted(self.inventory.inventory, key=lambda i: i['label']):
-                print(f'* {item["label"]}')

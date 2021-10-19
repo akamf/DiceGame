@@ -73,6 +73,7 @@ class Maze:
     def write_map(self, file_name: str):
         """
         Write an map, as an SVG (Scalable Vector Graphics) image, of the maze
+        For debugging
         :param file_name: The file name for the output file
         """
         def write_wall(wall_f, wall_x1, wall_y1, wall_x2, wall_y2):

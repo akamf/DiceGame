@@ -35,3 +35,12 @@ class Inventory:
                     case 'key':
                         return True
         return False
+
+    def print_inventory(self):
+        """Display the players inventory"""
+        if len(self.inventory) == 0:
+            print('Yor inventory is empty')
+        else:
+            print(f'\tINVENTORY')
+            for item in sorted(self.inventory, key=lambda i: i['label']):
+                print(f'* {item["label"]}')

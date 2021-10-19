@@ -19,7 +19,7 @@ class Game:
     def __init__(self):
         self.player = Player()
         self.enemy = Enemy()
-        self.maze = Maze(4, 4)
+        self.maze = Maze(2, 2)
         self.dice = Dice()
         self.items = Items()
         self.set_up_game()
@@ -40,7 +40,7 @@ class Game:
         """Creates game settings when the game is initialized"""
         # self.items = Items()
         self.maze.create_maze()
-        # self.maze.write_map('maze')
+        self.maze.write_map('maze')
         # self.player.set_actor_name(input('Please enter your name: '))  # Still uncertain if this is necessary or not
 
     def process_user_input(self):
@@ -61,9 +61,12 @@ class Game:
                 self.player.drop_item(item, current_location)
 
             case ['open', item]:
-                self.open(item)
+                if item == 'chest':
+                    self.open_chest(item)
+                else:
+                    print("There is nothing to open here!")
             case ['inventory']:
-                self.player.print_inventory()
+                self.player.inventory.print_inventory()
 
             case _:
                 print(f'I don\'t understand command: {command}')
@@ -146,25 +149,26 @@ class Game:
               f'\n{self.enemy.get_actor_name().upper()} Stats:\nAP - {self.enemy.attack_points}\n'
               f'HP - {self.enemy.health_points}\n')
 
-    def open(self, chest: str):
+    def open_chest(self, chest):
         current_location = self.maze.get_cell(*self.player.get_actor_position())
-        if current_location.got_item() and chest == 'chest':
-            for item in enviroment_items:
-                if item['label'] == 'chest':
-                    self.open_chest(item, self.maze.get_cell(*self.player.get_actor_position()))
-        else:
-            print("There is nothing to open here!")
+        for item in enviroment_items:
+            if chest == item['label']:
+                chest = item
 
-    def open_chest(self, chest: dict, current_location: tuple):
         chest['open'] = True
+
         print(f'The {chest["label"]} contains the following: ')
         for i in chest['contains']:
             print(f'* {i}')
         print('What do you want to do?')
-        command = input('>> ')
 
-        match command:
-            case ['get', item]:
-                self.player.get_item(item, current_location, chest)
-            # case ['drop', item]:
-            #     self.player.drop_item(item, current_location)
+        while chest['open']:
+            command = input('>> ')
+            match command.split():
+                case ['get', thing]:
+                    self.player.get_item(thing, current_location, chest)
+                case ['close'] | ['close', 'chest']:
+                    print(f'You close the {chest["label"]}')
+                    chest['open'] = False
+                # case ['drop', item]:
+                #     self.player.drop_item(item, current_location)
