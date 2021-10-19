@@ -21,15 +21,3 @@ class Items:
         for item in key_items:
             item['position'] = positions[cnt]
             cnt += 1
-
-    def get_chest_content(self, item_label):
-        item = None
-
-        if item_label in self['contains']:
-            for i in weapons_and_armors:
-                if i['label'] == item_label:
-                    item = i
-        else:
-            print(f'There is no {item_label} in the chest')
-
-        return item

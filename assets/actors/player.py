@@ -16,33 +16,30 @@ class Player(Actor):
             if value[0] == direction:
                 self.set_actor_position(value[1])
 
-    def get_item(self, item_label: str, current_location, chest=None):
+    def pick_up_item(self, item_label: str, current_location, chest=None):
         """
-        Get an item from the current player location or from a chest
+        Pick up an item from the current location, or from a chest, and append it to the players inventory
         :param item_label: The item to get
         :param current_location: The players current location
         :param chest: Chest to get item from, None as default
         """
         item = None
-
         if chest:
-            item = chest.get_chest_content(item_label)
+            if item_label in chest['contains']:
+                for i in weapons_and_armors:
+                    if i['label'] == item_label:
+                        item = i
+                self.inventory.process_item_pickup(item)
+                chest['contains'].remove(item_label)
+            else:
+                print(f'There is no {item_label} in the chest')
+
         elif item_label == current_location.item['label']:
             item = current_location.item
+            self.inventory.process_item_pickup(item)
+            current_location.item = None
+            current_location.got_item = False
 
-        if item:
-            if 'get' not in item['actions']:
-                print(f'It seems impossible to pick up the {item["label"]}')
-            elif not self.inventory.inventory_full():
-                print(f'You pick up the {item_label}!')
-                self.inventory.inventory.append(item)
-                if chest:
-                    chest['contains'].remove(item_label)
-                else:
-                    current_location.item = None
-                    current_location.got_item = False
-            else:
-                print(f'You can\'t pick up {item_label} before you drop something from your inventory')
         else:
             print(f'There is no {item_label} here')
 

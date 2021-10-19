@@ -1,6 +1,14 @@
 class Inventory:
     def __init__(self):
-        self.inventory = []
+        self.inventory = [
+            {
+                'label': 'key',
+                'description': 'rusty key',
+                'actions': ['get', 'drop', 'check', 'investigate'],
+                'bonus': 'This key can come in handy, if you ever need to unlock things.',
+                'position': None
+            }
+        ]
         self.max_limit = 3
         self.right_hand = None
         self.left_hand = None
@@ -24,7 +32,7 @@ class Inventory:
         :return: True if the item is found, else False
         """
         for item in self.inventory:
-            if item_label == item['label']:
+            if item_label == item['label'] or item_label == item['description']:
                 match item_label:
                     case 'lantern':
                         return True
@@ -32,9 +40,20 @@ class Inventory:
                         return True
                     case 'shield':
                         return True
-                    case 'key':
+                    case 'golden key':
+                        return True
+                    case 'rusty key':
                         return True
         return False
+
+    def process_item_pickup(self, item):
+        if 'get' not in item['actions']:
+            print(f'It seems impossible to pick up the {item["description"]}')
+        elif not self.inventory_full():
+            print(f'You pick up the {item["description"]}!')
+            self.inventory.append(item)
+        else:
+            print(f'You can\'t pick up {item["description"]} before you drop something from your inventory')
 
     def print_inventory(self):
         """Display the players inventory"""
@@ -42,5 +61,5 @@ class Inventory:
             print('Yor inventory is empty')
         else:
             print(f'\tINVENTORY')
-            for item in sorted(self.inventory, key=lambda i: i['label']):
-                print(f'* {item["label"]}')
+            for item in sorted(self.inventory, key=lambda i: i['description']):
+                print(f'* {item["description"]}')

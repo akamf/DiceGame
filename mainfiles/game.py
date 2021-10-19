@@ -56,15 +56,18 @@ class Game:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
             case ['get', item]:
-                self.player.get_item(item, current_location)
+                self.player.pick_up_item(item, current_location)
             case ['drop', item]:
                 self.player.drop_item(item, current_location)
 
-            case ['open', item]:
-                if item == 'chest':
-                    self.open_chest(item)
+            case ['open', 'chest']:
+                if self.player.inventory.item_in_inventory('rusty key'):
+                    self.open_chest()
+                elif not self.player.inventory.item_in_inventory('rusty key'):
+                    print('The chest is locked, you need something to unlock it with!')
                 else:
-                    print("There is nothing to open here!")
+                    print('There is nothing to open here!')
+
             case ['inventory']:
                 self.player.inventory.print_inventory()
 
@@ -141,7 +144,8 @@ class Game:
             print('You\'re in a dark space.')
 
         if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-            print(f'In this room there is a {self.maze.get_cell(*self.player.get_actor_position()).item["label"]}')
+            print(f'In this room there is a '
+                  f'{self.maze.get_cell(*self.player.get_actor_position()).item["description"]}')
 
     def print_battle_stats(self):
         print(f'\n{self.player.get_actor_name().upper()} STATS:\nAP - {self.player.attack_points}\n'
@@ -149,26 +153,29 @@ class Game:
               f'\n{self.enemy.get_actor_name().upper()} Stats:\nAP - {self.enemy.attack_points}\n'
               f'HP - {self.enemy.health_points}\n')
 
-    def open_chest(self, chest):
+    def open_chest(self):
         current_location = self.maze.get_cell(*self.player.get_actor_position())
+        chest = None
+
         for item in enviroment_items:
-            if chest == item['label']:
+            if 'chest' == item['label']:
                 chest = item
 
-        chest['open'] = True
+        if chest:
+            chest['open'] = True
 
-        print(f'The {chest["label"]} contains the following: ')
-        for i in chest['contains']:
-            print(f'* {i}')
-        print('What do you want to do?')
+            print(f'The {chest["description"]} contains the following: ')
+            for i in chest['contains']:
+                print(f'* {i}')
+            print('What do you want to do?')
 
-        while chest['open']:
-            command = input('>> ')
-            match command.split():
-                case ['get', thing]:
-                    self.player.get_item(thing, current_location, chest)
-                case ['close'] | ['close', 'chest']:
-                    print(f'You close the {chest["label"]}')
-                    chest['open'] = False
-                # case ['drop', item]:
-                #     self.player.drop_item(item, current_location)
+            while chest['open']:
+                command = input('>> ')
+                match command.split():
+                    case ['get', thing]:
+                        self.player.pick_up_item(thing, current_location, chest)
+                    case ['close'] | ['close', 'chest']:
+                        print(f'You close the {chest["description"]}')
+                        chest['open'] = False
+                    # case ['drop', item]:
+                    #     self.player.drop_item(item, current_location)
