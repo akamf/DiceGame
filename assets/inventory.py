@@ -25,15 +25,15 @@ class Inventory:
             return True
         return False
 
-    def item_in_inventory(self, item_label: str) -> bool:
+    def item_in_inventory(self, label: str) -> bool:
         """
         Search in player inventory for a certain item
-        :param item_label: The label for the item to search for
+        :param label: The label for the item to search for
         :return: True if the item is found, else False
         """
         for item in self.inventory:
-            if item_label == item['label'] or item_label == item['description']:
-                match item_label:
+            if label == item['label'] or label == item['description']:
+                match label:
                     case 'lantern':
                         return True
                     case 'sword':

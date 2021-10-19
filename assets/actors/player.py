@@ -68,5 +68,5 @@ class Player(Actor):
                 print(f'There is no {item_label} in your inventory!')
 
         else:
-            print(f'This room isn\'t empty! You can\'t the {item_label}')
+            print(f'This room isn\'t empty! You can\'t drop the {item_label}')
 

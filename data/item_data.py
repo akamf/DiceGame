@@ -6,22 +6,22 @@ key_items = [
         'description': 'burning lantern',
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It has a good bit of wick left.\n'
-                 'This lantern can light up the surroundings and you can see where to go.',
-        'position': None
+                 'This lantern can light up the surroundings and you can see where to go.\n',
+        'position': (0, 0)
     },
     {
         'label': 'key',
         'description': 'golden key',
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'There is a tiny text engraved on it: "OSTIUM IN LONGITUDINEM X ET Y"\n'
-                       'I wonder what that means..? It looks important tho!',
-        'position': None
+                       'I wonder what that means..? It looks important tho!\n',
+        'position': (0, 1)
     },
     {
         'label': 'key',
         'description': 'rusty key',
         'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'This key can come in handy, if you ever need to unlock things.',
+        'bonus': 'This key can come in handy, if you ever need to unlock things.\n',
         'position': None
     },
     {
@@ -29,8 +29,8 @@ key_items = [
         'description': 'dice',
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It has pictures of swords and shields instead of numbers.\n'
-                 'With this you can roll an extra dice in battle situations.',
-        'position': None
+                 'With this you can roll an extra dice in battle situations.\n',
+        'position': (1, 0)
     },
 ]
 
@@ -53,7 +53,7 @@ weapons_and_armors = [
     }
 ]
 
-enviroment_items = [
+environment_items = [
     {
         'label': 'door',
         'description': 'big hardwood door',
@@ -70,7 +70,7 @@ enviroment_items = [
         'open': False,
         'contains': [random.choice(weapons_and_armors)['description']],
         'requirements': 'rusty key',
-        'position': (1, 1)
+        'position': None
     }
 ]
 

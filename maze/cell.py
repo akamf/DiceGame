@@ -1,4 +1,4 @@
-from data.item_data import key_items, enviroment_items
+from data.item_data import key_items, environment_items
 
 
 class Cell:
@@ -41,7 +41,7 @@ class Cell:
                 self.item = item
                 self.got_item = True
 
-        for item in enviroment_items:
+        for item in environment_items:
             if item['position'] == (self.x, self.y):
                 self.item = item
                 self.got_item = True

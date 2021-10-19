@@ -1,7 +1,7 @@
 from assets.actors.enemy import Enemy
 from assets.dice import Dice
 from assets.items import Items
-from data.item_data import enviroment_items
+from data.item_data import environment_items
 from maze.map import Maze
 from assets.actors.player import Player
 
@@ -59,14 +59,19 @@ class Game:
                 self.player.pick_up_item(item, current_location)
             case ['drop', item]:
                 self.player.drop_item(item, current_location)
+            case ['check', item]:
+                print(f'You pick up and look at the {item}\n{self.check_item()}')
+            case ['investigate', item]:
+                print(f'{self.investigate_item()}')
 
             case ['open', 'chest']:
-                if self.player.inventory.item_in_inventory('rusty key'):
-                    self.open_chest()
-                elif not self.player.inventory.item_in_inventory('rusty key'):
-                    print('The chest is locked, you need something to unlock it with!')
-                else:
-                    print('There is nothing to open here!')
+                match self.player.inventory.item_in_inventory('rusty key'):
+                    case True:
+                        self.open_chest()
+                    case False:
+                        print('The chest is locked, you need something to unlock it with!')
+                    case _:
+                        print('There is nothing to open here!')
 
             case ['inventory']:
                 self.player.inventory.print_inventory()
@@ -140,12 +145,12 @@ class Game:
             for direction in self.maze.get_cell(*self.player.get_actor_position()).walls:
                 if not self.maze.get_cell(*self.player.get_actor_position()).walls[direction]:
                     print(f'* {direction}')
+            if self.maze.get_cell(*self.player.get_actor_position()).got_item:
+                print(f'There is a {self.maze.get_cell(*self.player.get_actor_position()).item["description"]} here')
         else:
             print('You\'re in a dark space.')
-
-        if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-            print(f'In this room there is a '
-                  f'{self.maze.get_cell(*self.player.get_actor_position()).item["description"]}')
+            if self.maze.get_cell(*self.player.get_actor_position()).got_item:
+                print(f'There is something in this room, maybe check it out?')
 
     def print_battle_stats(self):
         print(f'\n{self.player.get_actor_name().upper()} STATS:\nAP - {self.player.attack_points}\n'
@@ -157,7 +162,7 @@ class Game:
         current_location = self.maze.get_cell(*self.player.get_actor_position())
         chest = None
 
-        for item in enviroment_items:
+        for item in environment_items:
             if 'chest' == item['label']:
                 chest = item
 
@@ -179,3 +184,17 @@ class Game:
                         chest['open'] = False
                     # case ['drop', item]:
                     #     self.player.drop_item(item, current_location)
+
+    def check_item(self) -> str:
+        item = self.maze.get_cell(*self.player.get_actor_position()).item
+        if item and 'check' in item['actions']:
+            return f'It\'s a {item["description"]}'
+
+        return f'Can\'t check it out!'
+
+    def investigate_item(self) -> str:
+        item = self.maze.get_cell(*self.player.get_actor_position()).item
+        if item and 'investigate' in item['actions']:
+            return item['bonus']
+
+        return f'Can\'t investigate it further!'

@@ -4,7 +4,7 @@ from assets.items import Items
 from mainfiles.game import Game
 from maze.cell import Cell
 from maze.map import Maze
-from data.item_data import enviroment_items
+from data.item_data import environment_items
 from assets.actors.actor import Actor
 
 """
