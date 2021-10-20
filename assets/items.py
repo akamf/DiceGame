@@ -5,7 +5,7 @@ from data.item_data import key_items, environment_items, weapons_and_armors
 
 class Items:
     def __init__(self, **item):
-        # self.set_item_position()
+        self.set_item_position()
         self.__dict__ = item
 
     @staticmethod

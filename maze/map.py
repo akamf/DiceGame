@@ -1,5 +1,4 @@
 import random
-
 from maze.cell import Cell
 
 DIRECTIONS = [

@@ -25,7 +25,7 @@ class Player(Actor):
         """
         item = None
         if chest:
-            if item_label in chest['contains']:
+            if item_label in chest['contains']['label']:
                 for i in weapons_and_armors:
                     if i['label'] == item_label:
                         item = i
@@ -34,14 +34,14 @@ class Player(Actor):
             else:
                 print(f'There is no {item_label} in the chest')
 
-        elif item_label == current_location.item['label']:
-            item = current_location.item
-            self.inventory.process_item_pickup(item)
-            current_location.item = None
-            current_location.got_item = False
+        elif not current_location.item or item_label != current_location.item['label']:
+            print(f'There is no {item_label} here')
 
         else:
-            print(f'There is no {item_label} here')
+            item = current_location.item
+            if self.inventory.process_item_pickup(item):
+                current_location.item = None
+                current_location.got_item = False
 
     def drop_item(self, item_label: str, current_location):
         """
@@ -69,4 +69,3 @@ class Player(Actor):
 
         else:
             print(f'This room isn\'t empty! You can\'t drop the {item_label}')
-

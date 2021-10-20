@@ -1,14 +1,6 @@
 class Inventory:
     def __init__(self):
-        self.inventory = [
-            {
-                'label': 'key',
-                'description': 'rusty key',
-                'actions': ['get', 'drop', 'check', 'investigate'],
-                'bonus': 'This key can come in handy, if you ever need to unlock things.',
-                'position': None
-            }
-        ]
+        self.inventory = []
         self.max_limit = 3
         self.right_hand = None
         self.left_hand = None
@@ -43,6 +35,8 @@ class Inventory:
                     case 'golden key':
                         return True
                     case 'rusty key':
+                        return True
+                    case 'dice':
                         return True
         return False
 

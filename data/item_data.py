@@ -7,7 +7,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It has a good bit of wick left.\n'
                  'This lantern can light up the surroundings and you can see where to go.\n',
-        'position': (0, 0)
+        'position': None
     },
     {
         'label': 'key',
@@ -15,7 +15,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'There is a tiny text engraved on it: "OSTIUM IN LONGITUDINEM X ET Y"\n'
                        'I wonder what that means..? It looks important tho!\n',
-        'position': (0, 1)
+        'position': None
     },
     {
         'label': 'key',
@@ -30,7 +30,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It has pictures of swords and shields instead of numbers.\n'
                  'With this you can roll an extra dice in battle situations.\n',
-        'position': (1, 0)
+        'position': None
     },
 ]
 
@@ -68,9 +68,9 @@ environment_items = [
         'actions': ['open', 'close', 'check', 'investigate'],
         'bonus': 'It\'s locked!\nYou need a key to unlock it.',
         'open': False,
-        'contains': [random.choice(weapons_and_armors)['description']],
+        'contains': [random.choice(weapons_and_armors)],
         'requirements': 'rusty key',
-        'position': None
+        'position': (1, 1)
     }
 ]
 
