@@ -7,6 +7,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It has a good bit of wick left.\n'
                  'This lantern can light up the surroundings and you can see where to go.\n',
+        'storage': 'hand',
         'position': None
     },
     {
@@ -15,6 +16,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'There is a tiny text engraved on it: "OSTIUM IN LONGITUDINEM X ET Y"\n'
                        'I wonder what that means..? It looks important tho!\n',
+        'storage': 'pouch',
         'position': None
     },
     {
@@ -22,6 +24,7 @@ key_items = [
         'description': 'rusty key',
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'This key can come in handy, if you ever need to unlock things.\n',
+        'storage': 'pouch',
         'position': None
     },
     {
@@ -30,6 +33,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It has pictures of swords and shields instead of numbers.\n'
                  'With this you can roll an extra dice in battle situations.\n',
+        'storage': 'pouch',
         'position': None
     },
 ]
@@ -42,6 +46,7 @@ weapons_and_armors = [
         'bonus': 'This well crafted two-handed sword, with a dragon engraved on it\'s blade'
                  'It will give you double attack points. But it needs both your hands tho, '
                  'and can therefore not be paired with a shield!',
+        'storage': 'hand',
         'position': None
     },
     {
@@ -49,6 +54,7 @@ weapons_and_armors = [
         'description': 'old wooden shield',
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'It\'s a wolf painted on it.\nThis shield will get you extra defend points, with a minimum of 1',
+        'storage': 'hand',
         'position': None
     }
 ]

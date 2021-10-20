@@ -30,7 +30,7 @@ class Game:
         """Main game method. Sequence of all main methods"""
         while True:
             self.print_maze_info()
-            # print_player_location_in_maze(self)
+            print_player_location_in_maze(self)
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
             self.engaged_in_battle()
@@ -130,7 +130,7 @@ class Game:
             if self.player.defend_points > 0:
                 print(f'You block {self.player.defend_points} points from the attack')
                 if self.player.inventory.item_in_inventory('shield'):
-                    print(f'Thanks to your {self.player.inventory.get_inventory_item("shield")}'
+                    print(f'Thanks to your {self.player.inventory.get_item_from_pouch("shield")}'
                           f' you were able to block extra!')
 
             if self.player.health_points <= 0:

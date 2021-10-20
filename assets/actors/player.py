@@ -3,10 +3,12 @@ from assets.inventory import Inventory
 from data.item_data import weapons_and_armors
 from maze.map import DIRECTIONS
 
+STARTING_POINT = (0, 0)
+
 
 class Player(Actor):
     def __init__(self):
-        super().__init__('player', (0, 0), 0, 0, 10)
+        super().__init__('player', STARTING_POINT, 0, 0, 10)
         self.inventory = Inventory()
         self.in_battle = False
 
@@ -25,23 +27,19 @@ class Player(Actor):
         """
         item = None
         if chest:
-            if item_label in chest['contains']['label']:
+            if item_label in chest['contains']:
                 for i in weapons_and_armors:
                     if i['label'] == item_label:
                         item = i
-                self.inventory.process_item_pickup(item)
-                chest['contains'].remove(item_label)
+                self.inventory.process_item_pickup(item, current_location, chest)
             else:
                 print(f'There is no {item_label} in the chest')
 
         elif not current_location.item or item_label != current_location.item['label']:
             print(f'There is no {item_label} here')
 
-        else:
-            item = current_location.item
-            if self.inventory.process_item_pickup(item):
-                current_location.item = None
-                current_location.got_item = False
+        elif item_label == current_location.item['label']:
+            self.inventory.process_item_pickup(current_location.item, current_location)
 
     def drop_item(self, item_label: str, current_location):
         """
@@ -51,7 +49,7 @@ class Player(Actor):
         """
         item = None
         if not current_location.got_item:
-            for item_to_find in self.inventory.inventory:
+            for item_to_find in self.inventory.pouch:
                 if item_label == item_to_find['label']:
                     item = item_to_find
                     break
@@ -59,7 +57,7 @@ class Player(Actor):
             if item:
                 if 'drop' in item['actions']:
                     print(f'You drop the {item_label}')
-                    self.inventory.inventory.remove(item)
+                    self.inventory.pouch.remove(item)
                     current_location.item = item
                     current_location.got_item = True
                 else:
