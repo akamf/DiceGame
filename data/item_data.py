@@ -1,5 +1,7 @@
 import random
 
+labels = ['lantern', 'golden key', 'rusty key', 'dice', 'sword', 'shield']
+
 key_items = [
     {
         'label': 'lantern',
@@ -25,7 +27,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'This key can come in handy, if you ever need to unlock things.\n',
         'storage': 'pouch',
-        'position': (0, 0)
+        'position': None
     },
     {
         'label': 'dice',

@@ -34,14 +34,14 @@ class Cell:
         self.walls[wall] = False
         other_cell.walls[Cell.WALL_SEPARATES[wall]] = False
 
-    def set_item(self):
+    def set_item(self, items: list):
         """Set item to the cell with the same position, based on usable_items dict"""
-        for item in key_items:
-            if item['position'] == (self.x, self.y):
+        for item in items:
+            if item.__dict__['position'] == (self.x, self.y):
                 self.item = item
                 self.got_item = True
 
-        for item in environment_items:
-            if item['position'] == (self.x, self.y):
-                self.item = item
-                self.got_item = True
+        # for item in environment_items:
+        #     if item['position'] == (self.x, self.y):
+        #         self.item = item
+        #         self.got_item = True

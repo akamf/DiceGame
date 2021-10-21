@@ -2,10 +2,13 @@ import random
 
 from assets.actors.enemy import Enemy
 from assets.dice import Dice
-from assets.items import Items
-from data.item_data import environment_items
+from assets.item import Item
+from data.item_data import environment_items, key_items
 from maze.map import Maze
 from assets.actors.player import Player
+
+START = (0, 0)
+MAX = (2, 2)
 
 
 def print_player_location_in_maze(game):
@@ -20,32 +23,23 @@ def print_player_location_in_maze(game):
 class Game:
     def __init__(self):
         self.player = Player()
-        self.enemies = []
-        self.maze = Maze(5, 5)
+        self.enemies = [Enemy() for _ in range(0)]
+        self.items = [Item(**random.choice(key_items)) for _ in range(MAX[0])]
+        self.set_items_positions()
+        self.maze = Maze(*MAX, self.items)
         self.dice = Dice()
-        # self.items = Items()
-        self.set_up_game()
 
     def run(self):
         """Main game method. Sequence of all main methods"""
         while True:
             self.print_maze_info()
-            # print_player_location_in_maze(self)
+            print_player_location_in_maze(self)
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
             # self.engaged_in_battle()
             if self.player.get_actor_position() == (4, 4):
                 print('Winner!')
                 break
-
-    def set_up_game(self):
-        """Creates game settings when the game is initialized"""
-        # self.items = Items()
-        self.create_enemies()
-
-        self.maze.create_maze()
-        self.maze.write_map('maze')
-        # self.player.set_actor_name(input('Please enter your name: '))  # Still uncertain if this is necessary or not
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -61,13 +55,17 @@ class Game:
 
             case ['get', item]:
                 self.player.pick_up_item(item, current_location)
-
+            case ['swap']:
+                print(f'You have to type in two items to continue swapping or "cancel" to cancel')
+                while len(command.split()) != 2 and command != 'cancel':
+                    command = input('>> ')
+                self.player.swap_items(command.split(), current_location)
             case ['drop', item]:
                 self.player.drop_item(item, current_location)
             case ['check', item]:
                 print(f'You pick up and look at the {item}\n{self.check_item()}')
             case ['investigate', item]:
-                print(f'{self.investigate_item()}')
+                print(f'{self.investigate_item(item)}')
 
             case ['open', 'chest']:
                 if not current_location.got_item or current_location.item['label'] != 'chest':
@@ -197,40 +195,41 @@ class Game:
 
     def check_item(self) -> str:
         item = self.maze.get_cell(*self.player.get_actor_position()).item
-        if item and 'check' in item['actions']:
-            return f'It\'s a {item["description"]}'
+        if item and 'check' in item.__dict__['actions']:
+            return f'It\'s a {item.__dict__["description"]}'
 
         return f'Can\'t check it out!'
 
-    def investigate_item(self) -> str:
-        item = self.maze.get_cell(*self.player.get_actor_position()).item
-        if item and 'investigate' in item['actions']:
-            return item['bonus']
-
-        return f'Can\'t investigate it further!'
+    def investigate_item(self, label: str) -> str:
+        if self.maze.get_cell(*self.player.get_actor_position()).got_item:
+            item = self.maze.get_cell(*self.player.get_actor_position()).item
+            if label == item.__dict__['label'] and 'investigate' in item.__dict__['actions']:
+                return item.__dict__['bonus']
+            elif 'investigate' not in item.__dict__['actions']:
+                return f'Can\'t investigate {item.__dict__["description"]} further!'
+            elif self.maze.get_cell(*self.player.get_actor_position()).got_item and label != item.__dict__['label']:
+                return f'There is no {label} here, but something else!'
+        else:
+            return 'There is nothing to investigate here!'
 
     def create_enemies(self):
-        for i in range(3):
-            enemy = Enemy()
-            self.enemies.append(enemy)
 
-        self.generate_enemy_locations()
+        self.enemies[0].generate_enemy_locations(self.enemies)
 
     def get_enemy(self, current_location: tuple):
         for enemy in self.enemies:
             if enemy.get_actor_position() == current_location:
                 return enemy
 
-    def generate_enemy_locations(self):
-        locations = []
+    def set_items_positions(self):
+        positions = []
+        for i in range(len(self.items)):
+            (x, y) = (random.randrange(0, MAX[0]), random.randrange(0, MAX[0]))
+            while (x, y) in positions or (x, y) == (MAX[0] - 1, MAX[0] - 1):
+                (x, y) = (random.randrange(0, MAX[0]), random.randrange(0, MAX[0]))
+            positions.append((x, y))
 
-        for _ in range(len(self.enemies)):
-            (x, y) = (random.randrange(0, 5), random.randrange(0, 5))
-            while True:
-                if not (x, y) in locations and (x, y) != (4, 4):
-                    break
-                (x, y) = (random.randrange(0, 5), random.randrange(0, 5))
-            locations.append((x, y))
-
-        for i in range(len(self.enemies)):
-            self.enemies[i].set_actor_position(locations[i])
+        cnt = 0
+        for item in self.items:
+            item.position = positions[cnt]
+            cnt += 1

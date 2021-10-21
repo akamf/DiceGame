@@ -1,6 +1,6 @@
 import random
 from assets.dice import Dice
-from assets.items import Items
+from assets.item import Items
 from mainfiles.game import Game
 from maze.cell import Cell
 from maze.map import Maze

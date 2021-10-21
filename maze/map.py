@@ -10,7 +10,7 @@ DIRECTIONS = [
 
 
 class Maze:
-    def __init__(self, num_of_cells_x, num_of_cells_y, start_cell_x=0, start_cell_y=0):
+    def __init__(self, num_of_cells_x, num_of_cells_y, items, start_cell_x=0, start_cell_y=0):
         """
         :param num_of_cells_x: Number of Cell objects in x
         :param num_of_cells_y: Number of Cell objects in y
@@ -19,7 +19,10 @@ class Maze:
         """
         self.num_of_cells_x, self.num_of_cells_y = num_of_cells_x, num_of_cells_y
         self.start_x, self.start_y = start_cell_x, start_cell_y
+        self.game_items = items
         self.maze = [[Cell(x, y) for y in range(num_of_cells_y)] for x in range(num_of_cells_x)]
+        self.create_maze()
+        self.write_map('maze')
 
     def get_cell(self, x: int, y: int):
         return self.maze[x][y]
@@ -63,11 +66,11 @@ class Maze:
 
             direction, next_cell = random.choice(neighbours)
             current_cell.remove_wall(next_cell, direction)
-            current_cell.set_item()
+            current_cell.set_item(self.game_items)
             cell_stack.append(current_cell)
             current_cell = next_cell
             created_cells += 1
-        current_cell.set_item()
+        current_cell.set_item(self.game_items)
 
     def write_map(self, file_name: str):
         """
@@ -88,7 +91,7 @@ class Maze:
         width = int(height * aspect_ratio)  # Height and width of the maze image in pixels
         scale_y, scale_x = height / self.num_of_cells_y, width / self.num_of_cells_x  # Scaling the maze coordinates
 
-        with open('./gamemap/' + file_name + '.svg', 'w') as f:
+        with open(file_name + '.svg', 'w') as f:
             # SVG preamble and styles.
             print('<?xml version="1.0" encoding="utf-8"?>', file=f)
             print('<svg xmlns="http://www.w3.org/2000/svg"', file=f)

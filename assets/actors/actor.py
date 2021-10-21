@@ -1,7 +1,7 @@
 class Actor:
-    def __init__(self, name: str, position: tuple, ap: int, dp: int, hp: int):
+    def __init__(self, name: str, pos: tuple, ap: int, dp: int, hp: int):
         self.__name = name
-        self.__position = ActorPosition(*position)
+        self.__position = ActorPosition(*pos)
         self.attack_points = ap
         self.defend_points = dp
         self.health_points = hp
