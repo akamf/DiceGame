@@ -48,8 +48,8 @@ class Inventory:
         :return: True if the item is found, else False
         """
         if self.right_hand or self.left_hand:
-            if label == self.right_hand['label'] or self.right_hand['description']\
-                    or label == self.left_hand['label'] or self.left_hand['description']:
+            if label == self.right_hand['label'] | self.right_hand['description'] or\
+                    label == self.left_hand['label'] | self.left_hand['description']:
                 match label:
                     case 'lantern':
                         return True
@@ -57,6 +57,16 @@ class Inventory:
                         return True
                     case 'shield':
                         return True
+
+        # if self.left_hand:
+        #     if label == self.left_hand['label'] or label == self.left_hand['description']:
+        #         match label:
+        #             case 'lantern':
+        #                 return True
+        #             case 'sword':
+        #                 return True
+        #             case 'shield':
+        #                 return True
 
         for item in self.pouch:
             if label == item['label'] or label == item['description']:
@@ -87,10 +97,10 @@ class Inventory:
             hand = input(f'Which hand do you want to pick up the {item["description"]} with?\n>> ')
 
             if not self.inventory_full(item, hand):
-                print(f'You pick up the {item["description"]}!')
-                if hand == 'right' or 'right hand':
+                print(f'You pick up the {item["description"]} in your {hand} hand!')
+                if hand == 'right' or hand == 'right hand':
                     self.right_hand = item
-                elif hand == 'left' or 'left hand':
+                elif hand == 'left' or hand == 'left hand':
                     self.left_hand = item
 
                 if chest:

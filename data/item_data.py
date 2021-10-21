@@ -25,7 +25,7 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'This key can come in handy, if you ever need to unlock things.\n',
         'storage': 'pouch',
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'dice',
@@ -79,4 +79,3 @@ environment_items = [
         'position': (1, 1)
     }
 ]
-

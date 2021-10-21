@@ -25,15 +25,13 @@ class Player(Actor):
         :param current_location: The players current location
         :param chest: Chest to get item from, None as default
         """
-        item = None
         if chest:
-            if item_label in chest['contains']:
-                for i in weapons_and_armors:
-                    if i['label'] == item_label:
-                        item = i
-                self.inventory.process_item_pickup(item, current_location, chest)
-            else:
-                print(f'There is no {item_label} in the chest')
+            for i in chest['contains']:
+                if item_label == i['label']:
+                    item = i
+                    self.inventory.process_item_pickup(item, current_location, chest)
+                else:
+                    print(f'There is no {item_label} in the chest')
 
         elif not current_location.item or item_label != current_location.item['label']:
             print(f'There is no {item_label} here')

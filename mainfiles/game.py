@@ -23,17 +23,17 @@ class Game:
         self.enemies = []
         self.maze = Maze(5, 5)
         self.dice = Dice()
-        self.items = Items()
+        # self.items = Items()
         self.set_up_game()
 
     def run(self):
         """Main game method. Sequence of all main methods"""
         while True:
             self.print_maze_info()
-            print_player_location_in_maze(self)
+            # print_player_location_in_maze(self)
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
-            self.engaged_in_battle()
+            # self.engaged_in_battle()
             if self.player.get_actor_position() == (4, 4):
                 print('Winner!')
                 break
@@ -70,13 +70,14 @@ class Game:
                 print(f'{self.investigate_item()}')
 
             case ['open', 'chest']:
-                match self.player.inventory.item_in_inventory('rusty key'):
-                    case True:
-                        self.open_chest()
-                    case False:
-                        print('The chest is locked, you need something to unlock it with!')
-                    case _:
-                        print('There is nothing to open here!')
+                if not current_location.got_item or current_location.item['label'] != 'chest':
+                    print('There is nothing to open here!')
+                else:
+                    match self.player.inventory.item_in_inventory('rusty key'):
+                        case True:
+                            self.open_chest()
+                        case False:
+                            print('The chest is locked, you need something to unlock it with!')
 
             case ['inventory']:
                 self.player.inventory.print_inventory()
