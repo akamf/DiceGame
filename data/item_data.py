@@ -76,7 +76,7 @@ environment_items = [
         'actions': ['open', 'close', 'check', 'investigate'],
         'bonus': 'It\'s locked!\nYou need a key to unlock it.',
         'open': False,
-        'contains': [random.choice(weapons_and_armors)],
+        # 'contains': [Item(**random.choice(weapons_and_armors))],
         'requirements': 'rusty key',
         'position': (1, 1)
     }

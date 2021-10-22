@@ -47,9 +47,17 @@ class Inventory:
         :param label: The label for the item to search for
         :return: True if the item is found, else False
         """
-        if self.right_hand or self.left_hand:
-            if label == self.right_hand.__dict__['label'] or label == self.right_hand.__dict__['description'] or\
-                    label == self.left_hand.__dict__['label'] or label == self.left_hand.__dict__['description']:
+        if self.right_hand:
+            if label == self.right_hand.__dict__['label'] or label == self.right_hand.__dict__['description']:
+                match label:
+                    case 'lantern':
+                        return True
+                    case 'sword':
+                        return True
+                    case 'shield':
+                        return True
+        elif self.left_hand:
+            if label == self.left_hand.__dict__['label'] or label == self.left_hand.__dict__['description']:
                 match label:
                     case 'lantern':
                         return True

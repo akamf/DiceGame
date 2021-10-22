@@ -3,12 +3,12 @@ import random
 from assets.actors.enemy import Enemy
 from assets.dice import Dice
 from assets.item import Item
-from data.item_data import environment_items, key_items
+from data.item_data import environment_items, key_items, weapons_and_armors
 from maze.map import Maze
 from assets.actors.player import Player
 
 START = (0, 0)
-MAX = (2, 2)
+MAX = (4, 4)
 
 
 def print_player_location_in_maze(game):
@@ -24,9 +24,10 @@ class Game:
     def __init__(self):
         self.player = Player()
         self.enemies = [Enemy() for _ in range(0)]
-        self.items = [Item(**random.choice(key_items)) for _ in range(MAX[0])]
+        self.items = [Item(**random.choice(key_items + weapons_and_armors)) for _ in range(MAX[0])]
         self.set_items_positions()
-        self.maze = Maze(*MAX, self.items)
+        self.items.extend([Item(**item) for item in environment_items])
+        self.maze = Maze(*(MAX[0] + 1, MAX[1] + 1), self.items)
         self.dice = Dice()
 
     def run(self):
@@ -37,9 +38,6 @@ class Game:
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
             # self.engaged_in_battle()
-            if self.player.get_actor_position() == (4, 4):
-                print('Winner!')
-                break
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -67,15 +65,24 @@ class Game:
             case ['investigate', item]:
                 print(f'{self.investigate_item(item)}')
 
-            case ['open', 'chest']:
-                if not current_location.got_item or current_location.item['label'] != 'chest':
+            case ['open', item]:
+                if not current_location.got_item or current_location.item.__dict__ not in environment_items:
                     print('There is nothing to open here!')
+                elif item == current_location.item.__dict__['label']:
+                    if self.player.inventory.item_in_inventory('rusty key') or\
+                            self.player.inventory.item_in_inventory('golden key'):
+                        match item:
+                            case 'chest':
+                                self.open_chest(current_location.item)
+                            case 'door':
+                                print('Winner!')
+                                quit()
+                            case _:
+                                print(f'I can\'t understand "open {item}"')
+                    else:
+                        print(f'The {item} is locked, you need something to unlock it with!')
                 else:
-                    match self.player.inventory.item_in_inventory('rusty key'):
-                        case True:
-                            self.open_chest()
-                        case False:
-                            print('The chest is locked, you need something to unlock it with!')
+                    print(f'I can\'t understand "open {item}"')
 
             case ['inventory']:
                 self.player.inventory.print_inventory()
@@ -154,7 +161,7 @@ class Game:
                 if not self.maze.get_cell(*self.player.get_actor_position()).walls[direction]:
                     print(f'* {direction}')
             if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-                print(f'There is a {self.maze.get_cell(*self.player.get_actor_position()).item["description"]} here')
+                print(f'There is a {self.maze.get_cell(*self.player.get_actor_position()).item.__dict__["description"]} here')
         else:
             print('You\'re in a dark space.')
             if self.maze.get_cell(*self.player.get_actor_position()).got_item:
@@ -166,30 +173,23 @@ class Game:
               f'\n{self.get_enemy(self.player.get_actor_position()).get_actor_name().upper()} Stats:\nAP - {self.get_enemy(self.player.get_actor_position()).attack_points}\n'
               f'HP - {self.get_enemy(self.player.get_actor_position()).health_points}\n')
 
-    def open_chest(self):
-        current_location = self.maze.get_cell(*self.player.get_actor_position())
-        chest = None
+    def open_chest(self, chest):
+        if chest.__dict__['label'] == 'chest':
+            chest.__dict__['open'] = True
 
-        for item in environment_items:
-            if 'chest' == item['label']:
-                chest = item
-
-        if chest:
-            chest['open'] = True
-
-            print(f'The {chest["description"]} contains the following: ')
-            for i in chest['contains']:
+            print(f'The {chest.__dict__["description"]} contains the following: ')
+            for i in chest.__dict__['contains']:
                 print(f'* {i["description"]}')
             print('What do you want to do?')
 
-            while chest['open']:
+            while chest.__dict__['open']:
                 command = input('>> ')
                 match command.lower().split():
                     case ['get', item]:
-                        self.player.pick_up_item(item, current_location, chest)
+                        self.player.pick_up_item(item, self.maze.get_cell(*self.player.get_actor_position()), chest)
                     case ['close'] | ['close', 'chest']:
-                        print(f'You close the {chest["description"]}')
-                        chest['open'] = False
+                        print(f'You close the {chest.__dict__["description"]}')
+                        chest.__dict__['open'] = False
                     # case ['drop', item]:
                     #     self.player.drop_item(item, current_location)
 
@@ -212,9 +212,6 @@ class Game:
         else:
             return 'There is nothing to investigate here!'
 
-    def create_enemies(self):
-
-        self.enemies[0].generate_enemy_locations(self.enemies)
 
     def get_enemy(self, current_location: tuple):
         for enemy in self.enemies:

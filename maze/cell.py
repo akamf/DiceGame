@@ -1,4 +1,4 @@
-from data.item_data import key_items, environment_items
+from data.item_data import environment_items
 
 
 class Cell:
