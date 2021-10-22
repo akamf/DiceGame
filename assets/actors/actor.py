@@ -1,10 +1,11 @@
 class Actor:
-    def __init__(self, name: str, pos: tuple, ap: int, dp: int, hp: int):
+    def __init__(self, name: str, pos: tuple, ap: int, dp: int, hp: int, level: int):
         self.__name = name
         self.__position = ActorPosition(*pos)
         self.attack_points = ap
         self.defend_points = dp
         self.health_points = hp
+        self.level = level
 
     def set_actor_name(self, name: str):
         self.__name = name

@@ -1,6 +1,6 @@
 import random
 
-from data.item_data import key_items, environment_items, weapons_and_armors, labels
+from data.item_data import key_items, environment_items, weapons_and_armors
 
 
 class Item:

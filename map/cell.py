@@ -1,6 +1,3 @@
-from data.item_data import environment_items
-
-
 class Cell:
 
     WALL_SEPARATES = {
@@ -20,7 +17,8 @@ class Cell:
             'west': True
         }
         self.got_item = False
-        self.item = {}
+        self.item = None
+        self.enemy = None
 
     def surrounded_by_walls(self) -> bool:
         return all(self.walls.values())
@@ -35,13 +33,14 @@ class Cell:
         other_cell.walls[Cell.WALL_SEPARATES[wall]] = False
 
     def set_item(self, items: list):
-        """Set item to the cell with the same position, based on usable_items dict"""
+        """Set item to the cell with the same position"""
         for item in items:
             if item.__dict__['position'] == (self.x, self.y):
                 self.item = item
                 self.got_item = True
 
-        # for item in environment_items:
-        #     if item['position'] == (self.x, self.y):
-        #         self.item = item
-        #         self.got_item = True
+    def set_enemy(self, enemies: list):
+        """Set enemy to the cell with the same position"""
+        for enemy in enemies:
+            if enemy.__dict__['pos'] == (self.x, self.y):
+                self.enemy = enemy

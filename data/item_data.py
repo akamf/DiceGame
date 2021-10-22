@@ -1,7 +1,5 @@
 import random
 
-labels = ['lantern', 'golden key', 'rusty key', 'dice', 'sword', 'shield']
-
 key_items = [
     {
         'label': 'lantern',

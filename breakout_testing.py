@@ -1,9 +1,9 @@
 import random
 from assets.dice import Dice
-from assets.item import Items
+
 from mainfiles.game import Game
-from maze.cell import Cell
-from maze.map import Maze
+from map.cell import Cell
+from map.maze import Maze
 from data.item_data import environment_items
 from assets.actors.actor import Actor
 
@@ -26,9 +26,17 @@ def chest(game):
 
 
 def main():
-    game = Game()
+    # game = Game()
+    #
+    # game.run()
+    def method():
+        return 1, 2, 3, 4, 5, 6
 
-    game.run()
+    a, b = method()[2:None:3]
+    c, d = method()[2::3]
+    print(method())
+    print(a, b)
+    print(c, d)
 
 
 if __name__ == '__main__':

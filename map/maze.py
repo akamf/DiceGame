@@ -1,5 +1,5 @@
 import random
-from maze.cell import Cell
+from map.cell import Cell
 
 DIRECTIONS = [
     ('north', (0, -1)),
@@ -10,7 +10,7 @@ DIRECTIONS = [
 
 
 class Maze:
-    def __init__(self, num_of_cells_x, num_of_cells_y, items, start_cell_x=0, start_cell_y=0):
+    def __init__(self, num_of_cells_x, num_of_cells_y, items, enemies, start_cell_x=0, start_cell_y=0):
         """
         :param num_of_cells_x: Number of Cell objects in x
         :param num_of_cells_y: Number of Cell objects in y
@@ -19,7 +19,8 @@ class Maze:
         """
         self.num_of_cells_x, self.num_of_cells_y = num_of_cells_x, num_of_cells_y
         self.start_x, self.start_y = start_cell_x, start_cell_y
-        self.game_items = items
+        self.maze_items = items
+        self.maze_enemies = enemies
         self.maze = [[Cell(x, y) for y in range(num_of_cells_y)] for x in range(num_of_cells_x)]
         self.create_maze()
         self.write_map('maze')
@@ -30,7 +31,7 @@ class Maze:
     def get_valid_neighbours(self, cell: Cell):
         """
         Checks the current cells neighbours by decrement or increment it's x and y value
-        If the neighbouring cell is inside the maze, it appends to the neighbour list
+        If the neighbouring cell is inside the map, it appends to the neighbour list
         :param cell: Current cell
         :return: A list of all valid neighbours
         """
@@ -47,7 +48,7 @@ class Maze:
 
     def create_maze(self):
         """
-        Function to create the maze.
+        Function to create the map.
         The function checks the neighbouring cells and moves in random direction by removing the wall
         between the current and the next cell.
         If the neighbouring cell is a dead end, it backtrack to the last "unvisited" neighbouring cell
@@ -66,15 +67,17 @@ class Maze:
 
             direction, next_cell = random.choice(neighbours)
             current_cell.remove_wall(next_cell, direction)
-            current_cell.set_item(self.game_items)
+            current_cell.set_item(self.maze_items)
+            current_cell.set_enemy(self.maze_enemies)
             cell_stack.append(current_cell)
             current_cell = next_cell
             created_cells += 1
-        current_cell.set_item(self.game_items)
+        current_cell.set_item(self.maze_items)
+        current_cell.set_enemy(self.maze_enemies)
 
     def write_map(self, file_name: str):
         """
-        Write an map, as an SVG (Scalable Vector Graphics) image, of the maze
+        Write an map, as an SVG (Scalable Vector Graphics) image, of the map
         For debugging
         :param file_name: The file name for the output file
         """
@@ -88,8 +91,8 @@ class Maze:
         aspect_ratio = self.num_of_cells_x / self.num_of_cells_y
         padding = 10
         height = 500
-        width = int(height * aspect_ratio)  # Height and width of the maze image in pixels
-        scale_y, scale_x = height / self.num_of_cells_y, width / self.num_of_cells_x  # Scaling the maze coordinates
+        width = int(height * aspect_ratio)  # Height and width of the map image in pixels
+        scale_y, scale_x = height / self.num_of_cells_y, width / self.num_of_cells_x  # Scaling the map coordinates
 
         with open(file_name + '.svg', 'w') as f:
             # SVG preamble and styles.
@@ -115,7 +118,7 @@ class Maze:
                     if self.get_cell(x, y).walls['east']:
                         x1, y1, x2, y2 = (x + 1) * scale_x, y * scale_y, (x + 1) * scale_x, (y + 1) * scale_y
                         write_wall(f, x1, y1, x2, y2)
-            # Draw the North and West maze border
+            # Draw the North and West map border
             print('<line x1="0" y1="0" x2="{}" y2="0"/>'.format(width), file=f)
             print('<line x1="0" y1="0" x2="0" y2="{}"/>'.format(height), file=f)
             print('</svg>', file=f)

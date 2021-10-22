@@ -1,15 +1,12 @@
 from assets.actors.actor import Actor
 from assets.inventory import Inventory
-from maze.map import DIRECTIONS
-
-STARTING_POINT = (0, 0)
+from map.maze import DIRECTIONS
 
 
 class Player(Actor):
     def __init__(self):
-        super().__init__('player', STARTING_POINT, 0, 0, 10)
+        super().__init__('player', (0, 0), 0, 0, 10, 1)
         self.inventory = Inventory()
-        self.in_battle = False
 
     def go(self, direction: str):
         """Update player position, based on a constant value from DIRECTIONS"""
@@ -64,25 +61,25 @@ class Player(Actor):
         else:
             print(f'This space isn\'t empty! You can\'t drop the {label}')
 
-    def swap_items(self, items: list, current_location, chest=None):
-        item1, item2 = None, None
-
-        if current_location.got_item:
-            for item in self.inventory.pouch:
-                for i in items:
-                    if item.__dict__['label'] == i or item.__dict__['description'] == i:
-                        item1 = item
-                        self.inventory.pouch.remove(item)
-            for i in items:
-                if i == current_location.item.__dict__['label'] or i == current_location.item.__dict__['description']:
-                    item2 = current_location.item
-
-        if item1 and item2:
-            item1, item2 = item2, item1
-            self.inventory.pouch.append(item1)
-            current_location.item = item2
-            print(f'You swapped {item2.__dict__["description"]} for a {item1.__dict__["description"]}!')
-        else:
-            print('You can\'t swap that')
+    # def swap_items(self, items: list, current_location, chest=None):
+    #     item1, item2 = None, None
+    #
+    #     if current_location.got_item:
+    #         for item in self.inventory.pouch:
+    #             for i in items:
+    #                 if item.__dict__['label'] == i or item.__dict__['description'] == i:
+    #                     item1 = item
+    #                     self.inventory.pouch.remove(item)
+    #         for i in items:
+    #             if i == current_location.item.__dict__['label'] or i == current_location.item.__dict__['description']:
+    #                 item2 = current_location.item
+    #
+    #     if item1 and item2:
+    #         item1, item2 = item2, item1
+    #         self.inventory.pouch.append(item1)
+    #         current_location.item = item2
+    #         print(f'You swapped {item2.__dict__["description"]} for a {item1.__dict__["description"]}!')
+    #     else:
+    #         print('You can\'t swap that')
 
 
