@@ -7,6 +7,7 @@ class Player(Actor):
     def __init__(self):
         super().__init__('player', (0, 0), 0, 0, 10, 1)
         self.inventory = Inventory()
+        self.alive = True
 
     def go(self, direction: str):
         """Update player position, based on a constant value from DIRECTIONS"""
