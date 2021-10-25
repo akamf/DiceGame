@@ -19,10 +19,11 @@ class Maze:
         """
         self.num_of_cells_x, self.num_of_cells_y = num_of_cells_x, num_of_cells_y
         self.start_x, self.start_y = start_cell_x, start_cell_y
-        self.maze_items = items
-        self.maze_enemies = enemies
+        self.maze_end = (self.num_of_cells_x - 1, self.num_of_cells_y - 1)
+
+        self.generate_enemies_and_items_locations(items, enemies)
         self.maze = [[Cell(x, y) for y in range(num_of_cells_y)] for x in range(num_of_cells_x)]
-        self.create_maze()
+        self.create_maze(items, enemies)
         self.write_map('maze')
 
     def get_cell(self, x: int, y: int):
@@ -46,7 +47,7 @@ class Maze:
 
         return neighbours
 
-    def create_maze(self):
+    def create_maze(self, items, enemies):
         """
         Function to create the map.
         The function checks the neighbouring cells and moves in random direction by removing the wall
@@ -67,13 +68,14 @@ class Maze:
 
             direction, next_cell = random.choice(neighbours)
             current_cell.remove_wall(next_cell, direction)
-            current_cell.set_item(self.maze_items)
-            current_cell.set_enemy(self.maze_enemies)
+            current_cell.set_item(items)
+            current_cell.set_enemy(enemies)
             cell_stack.append(current_cell)
             current_cell = next_cell
             created_cells += 1
-        current_cell.set_item(self.maze_items)
-        current_cell.set_enemy(self.maze_enemies)
+
+        current_cell.set_item(items)
+        current_cell.set_enemy(enemies)
 
     def write_map(self, file_name: str):
         """
@@ -122,3 +124,24 @@ class Maze:
             print('<line x1="0" y1="0" x2="{}" y2="0"/>'.format(width), file=f)
             print('<line x1="0" y1="0" x2="0" y2="{}"/>'.format(height), file=f)
             print('</svg>', file=f)
+
+    def generate_enemies_and_items_locations(self, items: list, enemies: list):
+        locations = []
+        cnt = 0
+        for _ in range(len(enemies) + len(items)):
+            (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_x))
+            while (x, y) in locations or (x, y) == self.maze_end:
+                (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_x))
+            locations.append((x, y))
+
+        for enemy in enemies:
+            enemy.set_actor_position(locations[cnt])
+            enemy.pos = locations[cnt]
+            cnt += 1
+
+        for item in items:
+            if item.__dict__['label'] == 'door':
+                item.position = self.maze_end
+            else:
+                item.position = locations[cnt]
+                cnt += 1

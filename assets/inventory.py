@@ -86,7 +86,7 @@ class Inventory:
             self.pouch.append(item)
 
             if chest:
-                chest['contains'].remove(item)
+                chest.__dict__['contains'].remove(item)
             else:
                 current_location.item = None
                 current_location.got_item = False
@@ -102,7 +102,7 @@ class Inventory:
                     self.left_hand = item
 
                 if chest:
-                    chest['contains'].remove(item)
+                    chest.__dict__['contains'].remove(item)
                 else:
                     current_location.item = None
                     current_location.got_item = False

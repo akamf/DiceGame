@@ -13,10 +13,7 @@ class Game:
         while True:
             self.level = Level(self.current_level, self.player)
             self.level.run()
-            self.update_level()
-
-    def update_level(self):
-        if self.player.alive:
-            self.current_level += 1
-        else:
-            quit()
+            if self.player.alive:
+                self.current_level += 1
+            else:
+                break

@@ -3,12 +3,12 @@ import random
 from assets.actors.enemy import Enemy
 from assets.item import Item
 from data.enemy_data import enemies
-from data.item_data import environment_items, key_items, weapons_and_armors
+from data.item_data import key_items, usable_items
 from map.maze import Maze
 from mainfiles.battle import Battle
 
 START = (0, 0)
-GOAL = (4, 4)
+GOAL = (2, 2)
 
 
 def print_player_location_in_maze(game):
@@ -22,15 +22,13 @@ def print_player_location_in_maze(game):
 
 class Level:
     def __init__(self, level: int, player):
-        self.level = level
-        self.player = player
-        self.enemies = [Enemy(self.level, **enemy) for enemy in enemies]
-        self.items = [Item(**random.choice(key_items + weapons_and_armors)) for _ in range(GOAL[0])]
-        self.generate_enemy_and_items_locations()
-        self.items.extend([Item(**item) for item in environment_items])
-        self.maze = Maze(*(GOAL[0] + 1, GOAL[1] + 1), self.items, self.enemies)
         self.battle = None
         self.level_complete = False
+        self.enemies = [Enemy(level, **random.choice(enemies)) for _ in range(GOAL[0])]
+        self.items = [Item(**random.choice(usable_items)) for _ in range(GOAL[0])]
+        self.items.extend([Item(**item) for item in key_items])
+        self.maze = Maze(*(GOAL[0] + 1, GOAL[1] + 1), self.items, self.enemies)
+        self.player = player
 
     def run(self):
         """Main game method. Sequence of all main methods"""
@@ -39,7 +37,7 @@ class Level:
             print_player_location_in_maze(self)
             self.process_user_input()
             self.maze.get_cell(*self.player.get_actor_position())
-            # self.engaged_in_battle()
+            self.engaged_in_battle()
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -63,12 +61,16 @@ class Level:
             case ['drop', item]:
                 self.player.drop_item(item, current_location)
             case ['check', item]:
-                print(f'You pick up and look at the {item}\n{self.check_item()}')
+                if current_location.item and 'check' in current_location.item.__dict__['actions']:
+                    print(f'You pick up and look at the {item}\n'
+                          f'It\'s a {current_location.item.__dict__["description"]}')
+                else:
+                    print(f'You can\'t check that out.')
             case ['investigate', item]:
                 print(f'{self.investigate_item(item)}')
 
             case ['open', item]:
-                if not current_location.got_item or current_location.item.__dict__ not in environment_items:
+                if not current_location.item or current_location.item.__dict__['label'] != item:
                     print('There is nothing to open here!')
                 elif item == current_location.item.__dict__['label']:
                     if self.player.inventory.item_in_inventory('rusty key') or\
@@ -98,10 +100,11 @@ class Level:
 
             print(f'The {chest.__dict__["description"]} contains the following: ')
             for i in chest.__dict__['contains']:
-                print(f'* {i["description"]}')
+                print(f'* {i.__dict__["description"]}')
             print('What do you want to do?')
 
             while chest.__dict__['open']:
+                print('The chest is open')
                 command = input('>> ')
                 match command.lower().split():
                     case ['get', item]:
@@ -111,13 +114,6 @@ class Level:
                         chest.__dict__['open'] = False
                     # case ['drop', item]:
                     #     self.player.drop_item(item, current_location)
-
-    def check_item(self) -> str:
-        item = self.maze.get_cell(*self.player.get_actor_position()).item
-        if item and 'check' in item.__dict__['actions']:
-            return f'It\'s a {item.__dict__["description"]}'
-
-        return f'Can\'t check it out!'
 
     def investigate_item(self, label: str) -> str:
         if self.maze.get_cell(*self.player.get_actor_position()).got_item:
@@ -149,18 +145,3 @@ class Level:
             if self.maze.get_cell(*self.player.get_actor_position()).got_item:
                 print(f'There is something in this room, maybe check it out?')
 
-    def generate_enemy_and_items_locations(self):
-        locations = []
-        cnt = 0
-        for _ in range(len(self.enemies) + len(self.items)):
-            (x, y) = (random.randrange(0, GOAL[0]), random.randrange(0, GOAL[0]))
-            while (x, y) in locations or (x, y) == (GOAL[0] - 1, GOAL[0] - 1):
-                (x, y) = (random.randrange(0, GOAL[0]), random.randrange(0, GOAL[0]))
-            locations.append((x, y))
-        for enemy in self.enemies:
-            enemy.set_actor_position(locations[cnt])
-            enemy.pos = locations[cnt]
-            cnt += 1
-        for item in self.items:
-            item.position = locations[cnt]
-            cnt += 1

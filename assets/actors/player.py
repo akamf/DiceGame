@@ -23,8 +23,8 @@ class Player(Actor):
         :param chest: Chest to get item from, None as default
         """
         if chest:
-            for item in chest['contains']:
-                if item_label == item['label']:
+            for item in chest.__dict__['contains']:
+                if item_label == item.__dict__['label']:
                     self.inventory.process_item_pickup(item, current_location, chest)
                 else:
                     print(f'There is no {item_label} in the chest')
