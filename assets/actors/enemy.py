@@ -1,4 +1,3 @@
-import random
 from assets.actors.actor import Actor
 
 

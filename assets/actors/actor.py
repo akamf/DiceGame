@@ -22,6 +22,6 @@ class Actor:
 
 
 class ActorPosition:
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int):
         self.x_coord = x
         self.y_coord = y

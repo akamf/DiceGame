@@ -15,7 +15,7 @@ class Inventory:
         Check whether or not the inventory is full.
         The pouch can't hold more than it's max limit and the hands can only contain one item each.
         :param hand: The hand the player wants to pick up the item with
-        :param item:
+        :param item: The item the player wants to pick up
         :return: True if the pouch or the hands are full, else False
         """
         if item.__dict__['storage'] == 'pouch' and len(self.pouch) >= self.max_limit:
@@ -30,11 +30,13 @@ class Inventory:
             match hand:
                 case 'left' | 'left hand':
                     if self.left_hand:
-                        print('Your left hand is full, but you can pick it up with your right hand or drop the item in your left.')
+                        print(f'Your left hand is full!\nBut you can pick the {item.__dict__["description"]} '
+                              f'up with your right hand or drop the item in your left hand.')
                         return True
                 case 'right' | 'right hand':
                     if self.right_hand:
-                        print('Your right hand is full, but you can pick it up with your left hand or drop the item from your right.')
+                        print(f'Your right hand is full!\nBut you can pick the {item.__dict__["description"]} '
+                              f'up with your left hand or drop the item in your right hand.')
                         return True
                 case _:
                     print('Invalid command')
@@ -48,36 +50,28 @@ class Inventory:
         :return: True if the item is found, else False
         """
         if self.right_hand:
-            if label == self.right_hand.__dict__['label'] or label == self.right_hand.__dict__['description']:
-                match label:
-                    case 'lantern':
-                        return True
-                    case 'sword':
-                        return True
-                    case 'shield':
-                        return True
-        elif self.left_hand:
-            if label == self.left_hand.__dict__['label'] or label == self.left_hand.__dict__['description']:
-                match label:
-                    case 'lantern':
-                        return True
-                    case 'sword':
-                        return True
-                    case 'shield':
-                        return True
+            if label == self.right_hand.__dict__['label']\
+                    or label == self.right_hand.__dict__['description']:
+                return True
+
+        if self.left_hand:
+            if label == self.left_hand.__dict__['label']\
+                    or label == self.left_hand.__dict__['description']:
+                return True
 
         for item in self.pouch:
             if label == item.__dict__['label'] or label == item.__dict__['description']:
-                match label:
-                    case 'golden key':
-                        return True
-                    case 'rusty key':
-                        return True
-                    case 'dice':
-                        return True
+                return True
+
         return False
 
     def process_item_pickup(self, item, current_location, chest=None):
+        """
+        Pick up an item from either the players pouch or a player hand
+        :param item: The item to pick up
+        :param current_location: The players current location
+        :param chest: If it's a chest the player wants to get the item from
+        """
         if 'get' not in item.__dict__['actions']:
             print(f'It seems impossible to pick up the {item.__dict__["description"]}')
 
@@ -123,10 +117,18 @@ class Inventory:
             if self.right_hand:
                 print(f'Right hand:  {self.right_hand.__dict__["description"]}')
             else:
-                print(f'Right hand:  None')
+                print(f'Right hand:  {self.right_hand}')
 
             if self.left_hand:
                 print(f'Left hand:  {self.left_hand.__dict__["description"]}')
             else:
-                print(f'Left hand:  None')
+                print(f'Left hand:  {self.left_hand}')
 
+    def remove_pouch_item(self, label: str):
+        """
+        Remove an item from the pouch, if it's a consumable item (Health potion etc.)
+        :param label: The item label
+        """
+        for item in self.pouch:
+            if label == item.__dict__['label']:
+                self.pouch.remove(item)

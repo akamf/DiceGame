@@ -46,7 +46,7 @@ usable_items = [
         'label': 'pill',
         'description': 'dark pill',
         'actions': ['get', 'check', 'investigate'],
-        'bonus': 'It reeks of something rotten.\nIt can maybe come in handy in a battle situation.\n',
+        'bonus': 'It reeks of something rotten.\nIt may come in handy in a battle situation.\n',
         'storage': 'pouch',
         'battle': True,
         'position': None

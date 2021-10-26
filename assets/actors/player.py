@@ -1,3 +1,5 @@
+import random
+
 from assets.actors.actor import Actor
 from assets.inventory import Inventory
 from map.maze import DIRECTIONS
@@ -15,24 +17,24 @@ class Player(Actor):
             if value[0] == direction:
                 self.set_actor_position(value[1])
 
-    def pick_up_item(self, item_label: str, current_location, chest=None):
+    def pick_up_item(self, label: str, current_location, chest=None):
         """
         Pick up an item from the current location, or from a chest, and append it to the players inventory
-        :param item_label: The item to get
+        :param label: The item to get
         :param current_location: The players current location
         :param chest: Chest to get item from, None as default
         """
         if chest:
             for item in chest.__dict__['contains']:
-                if item_label == item.__dict__['label']:
+                if label == item.__dict__['label']:
                     self.inventory.process_item_pickup(item, current_location, chest)
                 else:
-                    print(f'There is no {item_label} in the chest')
+                    print(f'There is no {label} in the chest')
 
-        elif not current_location.item or item_label != current_location.item.__dict__['label']:
-            print(f'There is no {item_label} here')
+        elif not current_location.item or label != current_location.item.__dict__['label']:
+            print(f'There is no {label} here')
 
-        elif item_label == current_location.item.__dict__['label']:
+        elif label == current_location.item.__dict__['label']:
             self.inventory.process_item_pickup(current_location.item, current_location)
 
     def drop_item(self, label: str, current_location):
@@ -41,46 +43,38 @@ class Player(Actor):
         :param label: The label of the item to drop
         :param current_location: The players current location
         """
-        item = None
+        found_item = None
         if not current_location.got_item:
-            for item_to_find in self.inventory.pouch:
-                if label == item_to_find.__dict__['label']:
-                    item = item_to_find
+            for item in self.inventory.pouch:
+                if label == item.__dict__['label']:
+                    found_item = item
                     break
-
-            if item:
-                if 'drop' in item.__dict__['actions']:
-                    print(f'You drop the {label}')
-                    self.inventory.pouch.remove(item)
-                    current_location.item = item
-                    current_location.got_item = True
-                else:
-                    print(f'You can\'t drop the {label}, you should have thought of this earlier')
-
-            else:
-                print(f'There is no {label} in your inventory!')
         else:
             print(f'This space isn\'t empty! You can\'t drop the {label}')
 
-    # def swap_items(self, items: list, current_location, chest=None):
-    #     item1, item2 = None, None
-    #
-    #     if current_location.got_item:
-    #         for item in self.inventory.pouch:
-    #             for i in items:
-    #                 if item.__dict__['label'] == i or item.__dict__['description'] == i:
-    #                     item1 = item
-    #                     self.inventory.pouch.remove(item)
-    #         for i in items:
-    #             if i == current_location.item.__dict__['label'] or i == current_location.item.__dict__['description']:
-    #                 item2 = current_location.item
-    #
-    #     if item1 and item2:
-    #         item1, item2 = item2, item1
-    #         self.inventory.pouch.append(item1)
-    #         current_location.item = item2
-    #         print(f'You swapped {item2.__dict__["description"]} for a {item1.__dict__["description"]}!')
-    #     else:
-    #         print('You can\'t swap that')
+        if found_item and 'drop' in found_item.__dict__['actions']:
+            print(f'You drop the {label}')
+            self.inventory.pouch.remove(found_item)
+            current_location.item = found_item
+            current_location.got_item = True
+        else:
+            print(f'You can\'t drop the {label}, you should have thought of this earlier')
 
-
+    def use_battle_item(self, label: str, enemy):
+        if self.inventory.item_in_inventory(label):
+            match label:
+                case 'potion':
+                    print(f'You drank the health potion and gained 10 health points!')
+                    self.health_points += 10
+                    self.inventory.remove_pouch_item(label)
+                case 'pill':
+                    effect = random.choice(['cursed', 'lucky'])
+                    print(f'You consume the dark pill and you\'re {effect}!')
+                    match effect:
+                        case 'lucky':
+                            print('You gain 15 health points!')
+                            self.health_points += 15
+                        case 'cursed':
+                            print(f'You faint for a moment and the {enemy.get_actor_name()} takes advantage!\n'
+                                  f'You lose {enemy.attack_points} health points!')
+                            self.health_points -= enemy.attack_points

@@ -32,7 +32,7 @@ class Level:
 
     def run(self):
         """Main game method. Sequence of all main methods"""
-        while not self.level_complete:
+        while not self.level_complete and self.player.alive:
             self.print_maze_info()
             print_player_location_in_maze(self)
             self.process_user_input()
@@ -52,11 +52,6 @@ class Level:
 
             case ['get', item]:
                 self.player.pick_up_item(item, current_location)
-            # case ['swap']:
-            #     print(f'You have to type in two items to continue swapping or "cancel" to cancel')
-            #     while len(command.split()) != 2 and command != 'cancel':
-            #         command = input('>> ')
-            #     self.player.swap_items(command.split(), current_location)
             case ['drop', item]:
                 self.player.drop_item(item, current_location)
             case ['check', item]:
@@ -72,8 +67,7 @@ class Level:
                 if not current_location.item or current_location.item.__dict__['label'] != item:
                     print('There is nothing to open here!')
                 elif item == current_location.item.__dict__['label']:
-                    if self.player.inventory.item_in_inventory('rusty key') or\
-                            self.player.inventory.item_in_inventory('golden key'):
+                    if self.player.inventory.item_in_inventory(current_location.item.__dict__['requirements']):
                         match item:
                             case 'chest':
                                 self.open_chest(current_location.item)
@@ -127,10 +121,14 @@ class Level:
             return 'There is nothing to investigate here!'
 
     def engaged_in_battle(self, direction: str):
+        """
+        Check if the player is engaged in battle after it's movement. Aka is there an enemy in the new cell
+        :param direction: The direction which the player came from
+        """
         if self.maze.get_cell(*self.player.get_actor_position()).enemy:
             print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'
                   f'\nPREPARE TO FIGHT!')
-            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), direction, self.player)
+            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()).enemy, direction, self.player)
 
     def print_maze_info(self):
         if self.player.inventory.item_in_inventory('lantern'):
