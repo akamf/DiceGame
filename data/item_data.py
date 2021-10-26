@@ -9,6 +9,7 @@ usable_items = [
         'bonus': 'It has a good bit of wick left.\n'
                  'This lantern can light up the surroundings and you can see where to go.\n',
         'storage': 'hand',
+        'battle': False,
         'position': None
     },
     {
@@ -18,33 +19,36 @@ usable_items = [
         'bonus': 'It has pictures of swords and shields instead of numbers.\n'
                  'With this you can roll an extra dice in battle situations.\n',
         'storage': 'pouch',
+        'battle': False,
         'position': None
     },
     {
-        'label': 'dice',
-        'description': 'dice',
+        'label': 'potion',
+        'description': 'health potion',
         'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'It has pictures of swords and shields instead of numbers.\n'
-                 'With this you can roll an extra dice in battle situations.\n',
+        'bonus': 'This glass bottle has a purple liquid inside, a health potion.\n'
+                 'This will provide 10 health points when you drink it.\n',
         'storage': 'pouch',
+        'battle': True,
         'position': None
     },
     {
-        'label': 'dice',
-        'description': 'dice',
-        'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'It has pictures of swords and shields instead of numbers.\n'
-                 'With this you can roll an extra dice in battle situations.\n',
-        'storage': 'pouch',
+        'label': 'ring',
+        'description': 'golden ring',
+        'actions': ['get', 'check', 'investigate'],
+        'bonus': 'The ring emits a dark smoke.\nIt\'s very unclear what will happento the bearer of this ring. '
+                 'But there is only one way to find out, right?\n',
+        'storage': 'hand',
+        'battle': False,
         'position': None
     },
     {
-        'label': 'dice',
-        'description': 'dice',
-        'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'It has pictures of swords and shields instead of numbers.\n'
-                 'With this you can roll an extra dice in battle situations.\n',
+        'label': 'pill',
+        'description': 'dark pill',
+        'actions': ['get', 'check', 'investigate'],
+        'bonus': 'It reeks of something rotten.\nIt can maybe come in handy in a battle situation.\n',
         'storage': 'pouch',
+        'battle': True,
         'position': None
     },
 ]

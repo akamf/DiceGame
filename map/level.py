@@ -5,10 +5,10 @@ from assets.item import Item
 from data.enemy_data import enemies
 from data.item_data import key_items, usable_items
 from map.maze import Maze
-from mainfiles.battle import Battle
+from assets.battle import Battle
 
 START = (0, 0)
-GOAL = (2, 2)
+GOAL = (3, 3)
 
 
 def print_player_location_in_maze(game):
@@ -36,8 +36,6 @@ class Level:
             self.print_maze_info()
             print_player_location_in_maze(self)
             self.process_user_input()
-            self.maze.get_cell(*self.player.get_actor_position())
-            self.engaged_in_battle()
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -46,8 +44,9 @@ class Level:
 
         match command.lower().split():
             case ['go', direction] if direction in current_location.walls and not current_location.walls[direction]:
-                print('You go further in the map!\n')
+                print('You go further in the maze!\n')
                 self.player.go(direction)
+                self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
@@ -127,10 +126,11 @@ class Level:
         else:
             return 'There is nothing to investigate here!'
 
-    def engaged_in_battle(self):
+    def engaged_in_battle(self, direction: str):
         if self.maze.get_cell(*self.player.get_actor_position()).enemy:
-            print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}\nPREPARE TO FIGHT!')
-            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), self.player)
+            print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'
+                  f'\nPREPARE TO FIGHT!')
+            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), direction, self.player)
 
     def print_maze_info(self):
         if self.player.inventory.item_in_inventory('lantern'):

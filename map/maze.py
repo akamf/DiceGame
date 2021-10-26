@@ -130,7 +130,7 @@ class Maze:
         cnt = 0
         for _ in range(len(enemies) + len(items)):
             (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_x))
-            while (x, y) in locations or (x, y) == self.maze_end:
+            while (x, y) in locations or (x, y) == self.maze_end or (x, y) == (self.start_x, self.start_y):
                 (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_x))
             locations.append((x, y))
 
