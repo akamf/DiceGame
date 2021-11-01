@@ -3,5 +3,5 @@ class Item:
         self.__dict__ = item
 
     def __setattr__(self, key, value):
-        print(key, value)
+        print(self.__dict__, key, value)
         object.__setattr__(self, key, value)

@@ -12,16 +12,9 @@ DIRECTIONS = [
 
 class Maze:
     def __init__(self, num_of_cells_x, num_of_cells_y, items, enemies, start_cell_x=0, start_cell_y=0):
-        """
-        :param num_of_cells_x: Number of Cell objects in x
-        :param num_of_cells_y: Number of Cell objects in y
-        :param start_cell_x: X-coordinate for the staring Cell
-        :param start_cell_y: Y-coordinate for the starting Cell
-        """
         self.num_of_cells_x, self.num_of_cells_y = num_of_cells_x, num_of_cells_y
         self.start_x, self.start_y = start_cell_x, start_cell_y
         self.maze_end = (self.num_of_cells_x - 1, self.num_of_cells_y - 1)
-
         self.generate_enemies_and_items_locations(items, enemies)
         self.maze = [[Cell(x, y) for y in range(num_of_cells_y)] for x in range(num_of_cells_x)]
         self.create_maze(items, enemies)
@@ -78,7 +71,7 @@ class Maze:
         current_cell.set_item(items)
         current_cell.set_enemy(enemies)
 
-    def generate_enemies_and_items_locations(self, items: list, enemies: list):
+    def generate_enemies_and_items_locations(self, items: set, enemies: set):
         locations = []
         cnt = 0
         for _ in range(len(enemies) + len(items)):
@@ -93,8 +86,8 @@ class Maze:
             cnt += 1
 
         for item in items:
-            if item.__dict__['label'] == 'door':
-                item.position = self.maze_end
-            else:
-                item.position = locations[cnt]
-                cnt += 1
+            # if item.__dict__['label'] == 'door':
+            #     item.position = (4, 4)
+            # else:
+            item.position = locations[cnt]
+            cnt += 1

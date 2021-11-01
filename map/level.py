@@ -1,14 +1,11 @@
 import random
 
 from assets.actors.enemy import Enemy
+from assets.battle import Battle
 from assets.item import Item
 from data.enemy_data import enemies
 from data.item_data import key_items, usable_items
 from map.maze import Maze
-from assets.battle import Battle
-
-START = (0, 0)
-GOAL = (5, 5)
 
 
 def print_player_location_in_maze(game):
@@ -21,21 +18,25 @@ def print_player_location_in_maze(game):
 
 
 class Level:
-    def __init__(self, level: int, player):
+    def __init__(self, level: int, maze_size: tuple, player):
         self.battle = None
         self.level_complete = False
-        self.enemies = [Enemy(level, **random.choice(enemies)) for _ in range(GOAL[0])]
-        self.items = [Item(**random.choice(usable_items)) for _ in range(3)]
-        self.items.extend([Item(**item) for item in key_items])
-        self.maze = Maze(*(GOAL[0] + 1, GOAL[1] + 1), self.items, self.enemies)
+        self.enemies = {Enemy(level, **random.choice(enemies)) for _ in range(maze_size[0])}
+        self.maze = Maze(*maze_size, self.item_generator(), self.enemies)
         self.player = player
 
     def run(self):
-        """Main game method. Sequence of all main methods"""
         while not self.level_complete and self.player.alive:
             self.print_maze_info()
             print_player_location_in_maze(self)
             self.process_user_input()
+
+    @staticmethod
+    def item_generator():
+        items = [Item(**item) for item in usable_items]
+        level_items = {random.choice(items) for _ in range(0)}
+        level_items.update({Item(**item) for item in key_items})
+        return level_items
 
     def process_user_input(self):
         """Process the user input, and through a matching pattern decide what method(s) to call"""
@@ -46,7 +47,7 @@ class Level:
             case ['go', direction] if direction in current_location.walls and not current_location.walls[direction]:
                 print('You go further in the maze!\n')
                 self.player.go(direction)
-                self.engaged_in_battle(direction)
+                # self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
@@ -72,7 +73,7 @@ class Level:
                             case 'chest':
                                 self.open_chest(current_location.item)
                             case 'door':
-                                print('Winner!')
+                                print('You open the door and move to the next area!')
                                 self.level_complete = True
                             case _:
                                 print(f'I can\'t understand "open {item}"')
@@ -85,28 +86,25 @@ class Level:
                 self.player.inventory.print_inventory()
 
             case _:
-                print(f'I don\'t understand command: {command}')
+                print(f'I don\'t understand {command}...')
 
     def open_chest(self, chest):
         if chest.__dict__['label'] == 'chest':
             chest.__dict__['open'] = True
-
-            print(f'The {chest.__dict__["description"]} contains the following: ')
+            print(f'The {chest.__dict__["description"]} is open and contains the following: ')
             for i in chest.__dict__['contains']:
                 print(f'* {i.__dict__["description"]}')
-            print('What do you want to do?')
 
-            while chest.__dict__['open']:
-                print('The chest is open')
-                command = input('>> ')
-                match command.lower().split():
-                    case ['get', item]:
-                        self.player.pick_up_item(item, self.maze.get_cell(*self.player.get_actor_position()), chest)
-                    case ['close'] | ['close', 'chest']:
-                        print(f'You close the {chest.__dict__["description"]}')
-                        chest.__dict__['open'] = False
-                    # case ['drop', item]:
-                    #     self.player.drop_item(item, current_location)
+        while chest.__dict__['open']:
+            command = input('>> ')
+            match command.lower().split():
+                case ['get', item]:
+                    self.player.pick_up_item(item, self.maze.get_cell(*self.player.get_actor_position()), chest)
+                case ['close'] | ['close', 'chest']:
+                    print(f'You close the {chest.__dict__["description"]}')
+                    chest.__dict__['open'] = False
+                case _:
+                    print(f'I don\'t understand {command}...')
 
     def investigate_item(self, label: str) -> str:
         if self.maze.get_cell(*self.player.get_actor_position()).got_item:

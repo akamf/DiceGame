@@ -14,8 +14,11 @@ class Actor:
         return self.__name
 
     def set_actor_position(self, new_position: tuple):
-        self.__position.x_coord += new_position[0]
-        self.__position.y_coord += new_position[1]
+        if new_position == (0, 0):
+            self.__position = ActorPosition(0, 0)
+        else:
+            self.__position.x_coord += new_position[0]
+            self.__position.y_coord += new_position[1]
 
     def get_actor_position(self) -> tuple:
         return self.__position.x_coord, self.__position.y_coord

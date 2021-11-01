@@ -10,7 +10,7 @@ usable_items = [
                  'This lantern can light up the surroundings and you can see where to go.\n',
         'storage': 'hand',
         'battle': False,
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'dice',
@@ -20,7 +20,7 @@ usable_items = [
                  'With this you can roll an extra dice in battle situations.\n',
         'storage': 'pouch',
         'battle': False,
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'potion',
@@ -30,7 +30,7 @@ usable_items = [
                  'This will provide 10 health points when you drink it.\n',
         'storage': 'pouch',
         'battle': True,
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'ring',
@@ -40,7 +40,7 @@ usable_items = [
                  'But there is only one way to find out, right?\n',
         'storage': 'hand',
         'battle': False,
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'pill',
@@ -49,7 +49,7 @@ usable_items = [
         'bonus': 'It reeks of something rotten.\nIt may come in handy in a battle situation.\n',
         'storage': 'pouch',
         'battle': True,
-        'position': None
+        'position': (0, 0)
     },
 ]
 
@@ -109,7 +109,7 @@ key_items = [
         'bonus': 'There is a tiny text engraved on it: "OSTIUM IN LONGITUDINEM X ET Y"\n'
                        'I wonder what that means..? It looks important tho!\n',
         'storage': 'pouch',
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'key',
@@ -117,15 +117,15 @@ key_items = [
         'actions': ['get', 'drop', 'check', 'investigate'],
         'bonus': 'This key can come in handy, if you ever need to unlock things.\n',
         'storage': 'pouch',
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'door',
         'description': 'big hardwood door',
-        'actions': ['unlock', 'check', 'investigate'],
+        'actions': ['open', 'check', 'investigate'],
         'bonus': 'It\'s locked!\nYou need something to unlock it.',
         'requirements': 'golden key',
-        'position': None
+        'position': (0, 0)
     },
     {
         'label': 'chest',
@@ -135,6 +135,6 @@ key_items = [
         'open': False,
         'contains': [Item(**random.choice(weapons_and_armors))],
         'requirements': 'rusty key',
-        'position': None
+        'position': (0, 0)
     }
 ]

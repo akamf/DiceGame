@@ -1,5 +1,5 @@
 import random
-
+import colorama
 from assets.actors.actor import Actor
 from assets.inventory import Inventory
 from map.maze import DIRECTIONS
@@ -7,7 +7,7 @@ from map.maze import DIRECTIONS
 
 class Player(Actor):
     def __init__(self):
-        super().__init__('player', (0, 0), 0, 0, 10, 1)
+        super().__init__('player', (4, 4), 0, 0, 10, 1)
         self.inventory = Inventory()
         self.alive = True
 
@@ -29,7 +29,7 @@ class Player(Actor):
                 if label == item.__dict__['label']:
                     self.inventory.process_item_pickup(item, current_location, chest)
                 else:
-                    print(f'There is no {label} in the chest')
+                    print(f'There is no {colorama.Fore.RED}{label}{colorama.Style.RESET_ALL} in the chest')
 
         elif not current_location.item or label != current_location.item.__dict__['label']:
             print(f'There is no {label} here')
@@ -67,9 +67,11 @@ class Player(Actor):
                     print(f'You drank the health potion and gained 10 health points!')
                     self.health_points += 10
                     self.inventory.remove_pouch_item(label)
+
                 case 'pill':
                     effect = random.choice(['cursed', 'lucky'])
                     print(f'You consume the dark pill and you\'re {effect}!')
+
                     match effect:
                         case 'lucky':
                             print('You gain 15 health points!')
@@ -78,3 +80,8 @@ class Player(Actor):
                             print(f'You faint for a moment and the {enemy.get_actor_name()} takes advantage!\n'
                                   f'You lose {enemy.attack_points} health points!')
                             self.health_points -= enemy.attack_points
+
+    def reset_player_stats(self):
+        self.set_actor_position((0, 0))
+        self.inventory = Inventory()
+        self.level += 1
