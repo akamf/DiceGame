@@ -138,5 +138,3 @@ key_items = [
         'position': None
     }
 ]
-
-

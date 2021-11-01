@@ -26,17 +26,11 @@ def chest(game):
 
 
 def main():
-    # game = Game()
-    #
-    # game.run()
-    def method():
-        return 1, 2, 3, 4, 5, 6
-
-    a, b = method()[2:None:3]
-    c, d = method()[2::3]
-    print(method())
-    print(a, b)
-    print(c, d)
+    self.equipment = Equipment()
+    if item_name == i.name and i.equippable:
+        match i.slot:
+            case 'hands':
+                self.equipment.hands.equip(item)
 
 
 if __name__ == '__main__':

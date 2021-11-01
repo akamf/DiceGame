@@ -8,7 +8,7 @@ from map.maze import Maze
 from assets.battle import Battle
 
 START = (0, 0)
-GOAL = (3, 3)
+GOAL = (5, 5)
 
 
 def print_player_location_in_maze(game):
@@ -25,7 +25,7 @@ class Level:
         self.battle = None
         self.level_complete = False
         self.enemies = [Enemy(level, **random.choice(enemies)) for _ in range(GOAL[0])]
-        self.items = [Item(**random.choice(usable_items)) for _ in range(GOAL[0])]
+        self.items = [Item(**random.choice(usable_items)) for _ in range(3)]
         self.items.extend([Item(**item) for item in key_items])
         self.maze = Maze(*(GOAL[0] + 1, GOAL[1] + 1), self.items, self.enemies)
         self.player = player
@@ -128,7 +128,7 @@ class Level:
         if self.maze.get_cell(*self.player.get_actor_position()).enemy:
             print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'
                   f'\nPREPARE TO FIGHT!')
-            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()).enemy, direction, self.player)
+            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), direction, self.player)
 
     def print_maze_info(self):
         if self.player.inventory.item_in_inventory('lantern'):
