@@ -62,14 +62,18 @@ class Maze:
 
             direction, next_cell = random.choice(neighbours)
             current_cell.remove_wall(next_cell, direction)
-            current_cell.set_item(items)
-            current_cell.set_enemy(enemies)
+            # current_cell.set_item(items)
+            # current_cell.set_enemy(enemies)
             cell_stack.append(current_cell)
+            # print((current_cell.x, current_cell.y), current_cell.got_item)
             current_cell = next_cell
             created_cells += 1
 
-        current_cell.set_item(items)
-        current_cell.set_enemy(enemies)
+        for line in self.maze:
+            for cell in line:
+                cell.set_item(items)
+                cell.set_enemy(enemies)
+                print((cell.x, cell.y), cell.got_item)
 
     def generate_enemies_and_items_locations(self, items: set, enemies: set):
         locations = []
@@ -86,8 +90,8 @@ class Maze:
             cnt += 1
 
         for item in items:
-            # if item.__dict__['label'] == 'door':
-            #     item.position = (4, 4)
-            # else:
-            item.position = locations[cnt]
-            cnt += 1
+            if item.__dict__['label'] == 'door':
+                item.position = self.maze_end
+            else:
+                item.position = locations[cnt]
+                cnt += 1

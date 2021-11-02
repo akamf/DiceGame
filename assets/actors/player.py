@@ -7,7 +7,7 @@ from map.maze import DIRECTIONS
 
 class Player(Actor):
     def __init__(self):
-        super().__init__('player', (4, 4), 0, 0, 10, 1)
+        super().__init__('player', (0, 0), 0, 0, 10, 1)
         self.inventory = Inventory()
         self.alive = True
 

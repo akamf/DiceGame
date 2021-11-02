@@ -12,9 +12,12 @@ class Game:
     def run(self):
         while self.player.alive:
             self.current_level += 1
-            if self.current_level % 2 == 0:
-                self.maze_size[0] += 2
-                self.maze_size[1] += 2
+            self. maze_size= self.update_maze_size()
             self.level = Level(self.current_level, self.maze_size, self.player)
             self.level.run()
             self.player.reset_player_stats()
+
+    def update_maze_size(self) -> tuple:
+        if self.current_level % 2 == 0:
+            return self.maze_size[0] + 2, self.maze_size[1] + 2
+        return self.maze_size
