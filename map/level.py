@@ -22,32 +22,37 @@ class Level:
         self.battle = None
         self.level_complete = False
         self.enemies = {Enemy(level, **random.choice(enemies)) for _ in range(maze_size[0])}
-        self.maze = Maze(*maze_size, self.item_generator(), self.enemies)
+        self.maze = Maze(*maze_size, self.level_items(), self.enemies)
         self.player = player
 
-    def run(self):
+    def run_level(self):
         while not self.level_complete and self.player.alive:
             self.print_maze_info()
             print_player_location_in_maze(self)
             self.process_user_input()
 
     @staticmethod
-    def item_generator():
+    def level_items() -> set:
+        """
+        First th method creates a list of all usable items. Then it chooses three random items from that list.
+        Finally it adds all key items to the item set.
+        :return: A set of the items in this level
+        """
         items = [Item(**item) for item in usable_items]
-        level_items = {random.choice(items) for _ in range(0)}
+        level_items = {random.choice(items) for _ in range(3)}
         level_items.update({Item(**item) for item in key_items})
         return level_items
 
     def process_user_input(self):
-        """Process the user input, and through a matching pattern decide what method(s) to call"""
-        command = input('>> ')
+        """Process the users input, and through a matching pattern decide what method(s) to call"""
         current_location = self.maze.get_cell(*self.player.get_actor_position())
+        command = input('>> ')
 
         match command.lower().split():
             case ['go', direction] if direction in current_location.walls and not current_location.walls[direction]:
-                print('You go further in the maze!\n')
+                print('You go further in the maze!')
                 self.player.go(direction)
-                # self.engaged_in_battle(direction)
+                self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
@@ -135,9 +140,10 @@ class Level:
                 if not self.maze.get_cell(*self.player.get_actor_position()).walls[direction]:
                     print(f'* {direction}')
             if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-                print(f'There is a {self.maze.get_cell(*self.player.get_actor_position()).item.__dict__["description"]} here')
+                print(f'There is a '
+                      f'{self.maze.get_cell(*self.player.get_actor_position()).item.__dict__["description"]} here')
         else:
-            print('You\'re in a dark space.')
+            print('The area is very dark!')
             if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-                print(f'There is something in this room, maybe check it out?')
+                print('There is something in this room, maybe check it out?')
 

@@ -1,5 +1,4 @@
 class Cell:
-
     WALL_SEPARATES = {
         'north': 'south',
         'south': 'north',

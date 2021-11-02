@@ -9,48 +9,55 @@ class Battle:
         self.battle(current_location, former_location, player)
 
     @staticmethod
+    def check_if_player_in_battle(current_location, player) -> bool:
+        """
+        :param current_location: The players current location
+        :param player: Game player
+        :return: True if the battle is over , else False
+        """
+        if current_location.enemy.health_points <= 0:
+            print(f'You defeated the {current_location.enemy.get_actor_name()}!')
+            current_location.enemy = None
+            return False
+        elif player.health_points <= 0:
+            print(f'The {current_location.enemy.get_actor_name()} defeated you!\nGAME OVER!')
+            player.alive = False
+            return False
+        return True
+
+    def battle_round(self, current_location, player):
+        """
+        Print the outcome of each battle round
+        :param current_location: The players current location
+        :param player: Game player
+        """
+        current_location.enemy.health_points = current_location.enemy.health_points - player.attack_points\
+            if current_location.enemy.health_points - player.attack_points > 0 else 0
+        print(f'You strike the {current_location.enemy.get_actor_name()} with {player.attack_points} attack points! '
+              f'The enemy has {current_location.enemy.health_points} health points remaining')
+        self.in_battle = self.check_if_player_in_battle(current_location, player)
+
+        if self.in_battle:
+            player.health_points += player.defend_points
+            player.health_points = player.health_points - current_location.enemy.attack_points\
+                if player.health_points - current_location.enemy.attack_points > 0 else 0
+
+            print(f'The {current_location.enemy.get_actor_name()} strikes back and attack you with '
+                  f'{current_location.enemy.attack_points} attack points!')
+            if player.defend_points > 0:
+                print(f'You block the attack with {player.defend_points} defend points!')
+                if player.inventory.item_in_inventory('shield'):
+                    print(f'And thanks to your {player.inventory.item_in_inventory("shield")}'
+                          f' you were able to block extra much!')
+            print(f'You have {player.health_points} health points remaining.')
+            self.in_battle = self.check_if_player_in_battle(current_location, player)
+
+    @staticmethod
     def print_battle_stats(current_location, player):
         print(f'\n{player.get_actor_name().upper()} STATS:\nAttack Points - {player.attack_points}\n'
               f'Health Points - {player.health_points}\nDefend Points - {player.defend_points}\n\n'
               f'{current_location.enemy.get_actor_name().upper()} STATS:\nAttack Points - '
               f'{current_location.enemy.attack_points}\nHealth Points - {current_location.enemy.health_points}\n')
-
-    @staticmethod
-    def battle_outcome(current_location, player) -> bool:
-        """
-        Set and print the outcome of each battle round
-        :param current_location: The players current location
-        :param player: Game player
-        :return: True if the battle is over , else False
-        """
-        current_location.enemy.health_points -= player.attack_points if current_location.enemy.health_points > 0 else 0
-        print(f'You strike the {current_location.enemy.get_actor_name()} with {player.attack_points} attack points! '
-              f'The enemy has {current_location.enemy.health_points} health points remaining')
-
-        if current_location.enemy.health_points <= 0:
-            print(f'You defeated {current_location.enemy.get_actor_name()}!')
-            current_location.enemy = None
-            return False
-
-        player.health_points += player.defend_points
-        player.health_points -= current_location.enemy.attack_points if player.health_points > 0 else 0
-        if player.defend_points > 0:
-            print(f'You have {player.defend_points} defend points, and therefore block some of the '
-                  f'{current_location.enemy.get_actor_name()}\'s attack')
-            if player.inventory.item_in_inventory('shield'):
-                print(f'And thanks to your {player.inventory.item_in_inventory("shield")}'
-                      f' you were able to block extra much!')
-
-        print(f'The {current_location.enemy.get_actor_name()}'
-              f' strikes back and attack you with {current_location.enemy.attack_points} '
-              f'attack points! You have {player.health_points} health points remaining.')
-
-        if player.health_points <= 0:
-            print(f'The {current_location.enemy.get_actor_name()} defeated you!\nGAME OVER!')
-            player.alive = False
-            return False
-
-        return True
 
     def set_battle_stats(self, current_location, player):
         """
@@ -89,17 +96,17 @@ class Battle:
             match command.lower().split():
                 case ['roll'] | ['roll', 'dice'] | ['roll', 'dices']:
                     self.set_battle_stats(current_location, player)
-                    self.in_battle = self.battle_outcome(current_location, player)
+                    self.battle_round(current_location, player)
                 case ['use', item]:
                     player.use_battle_item(item, current_location.enemy)
                     self.set_battle_stats(current_location, player)
-                    self.in_battle = self.battle_outcome(current_location, player)
+                    self.battle_round(current_location, player)
                 case ['run'] | ['run', 'back'] | ['run', 'away'] | ['escape']:
-                    self.escape(last_direction, player)
+                    self.escape_battle(last_direction, player)
                 case _:
                     print('I don\'t understand!')
 
-    def escape(self, last_direction: str, player):
+    def escape_battle(self, last_direction: str, player):
         """
         Escape battle method. It checks where the player came from and move it back there.
         :param last_direction: The direction which the player came from

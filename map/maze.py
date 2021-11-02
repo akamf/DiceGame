@@ -15,9 +15,9 @@ class Maze:
         self.num_of_cells_x, self.num_of_cells_y = num_of_cells_x, num_of_cells_y
         self.start_x, self.start_y = start_cell_x, start_cell_y
         self.maze_end = (self.num_of_cells_x - 1, self.num_of_cells_y - 1)
-        self.generate_enemies_and_items_locations(items, enemies)
         self.maze = [[Cell(x, y) for y in range(num_of_cells_y)] for x in range(num_of_cells_x)]
-        self.create_maze(items, enemies)
+        self.create_maze()
+        self.set_item_and_enemies_in_location(self.generate_locations(items, enemies), items, enemies)
         write_map(self, 'maze')
 
     def get_cell(self, x: int, y: int):
@@ -41,12 +41,12 @@ class Maze:
 
         return neighbours
 
-    def create_maze(self, items, enemies):
+    def create_maze(self):
         """
         Function to create the map.
         The function checks the neighbouring cells and moves in random direction by removing the wall
         between the current and the next cell.
-        If the neighbouring cell is a dead end, it backtrack to the last "unvisited" neighbouring cell
+        If the neighbouring cell is a dead end, it backtracks to the last "unvisited" neighbouring cell
         """
         total_cells = self.num_of_cells_x * self.num_of_cells_y
         cell_stack = []
@@ -62,27 +62,23 @@ class Maze:
 
             direction, next_cell = random.choice(neighbours)
             current_cell.remove_wall(next_cell, direction)
-            # current_cell.set_item(items)
-            # current_cell.set_enemy(enemies)
             cell_stack.append(current_cell)
-            # print((current_cell.x, current_cell.y), current_cell.got_item)
             current_cell = next_cell
             created_cells += 1
 
-        for line in self.maze:
-            for cell in line:
-                cell.set_item(items)
-                cell.set_enemy(enemies)
-                print((cell.x, cell.y), cell.got_item)
-
-    def generate_enemies_and_items_locations(self, items: set, enemies: set):
+    def generate_locations(self, items: set, enemies: set) -> list:
         locations = []
-        cnt = 0
+
         for _ in range(len(enemies) + len(items)):
             (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_y))
             while (x, y) in locations or (x, y) == self.maze_end or (x, y) == (self.start_x, self.start_y):
                 (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_y))
             locations.append((x, y))
+
+        return locations
+
+    def set_item_and_enemies_in_location(self, locations: list, items: set, enemies: set):
+        cnt = 0
 
         for enemy in enemies:
             enemy.set_actor_position(locations[cnt])
@@ -95,3 +91,9 @@ class Maze:
             else:
                 item.position = locations[cnt]
                 cnt += 1
+
+        for line in self.maze:
+            for cell in line:
+                cell.set_item(list(items))
+                cell.set_enemy(list(enemies))
+                print((cell.x, cell.y), cell.got_item)
