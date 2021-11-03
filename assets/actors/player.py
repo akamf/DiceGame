@@ -1,5 +1,4 @@
 import random
-import colorama
 from assets.actors.actor import Actor
 from assets.inventory import Inventory
 from map.maze import DIRECTIONS
@@ -29,7 +28,7 @@ class Player(Actor):
                 if label == item.__dict__['label']:
                     self.inventory.process_item_pickup(item, current_location, chest)
                 else:
-                    print(f'There is no {colorama.Fore.RED}{label}{colorama.Style.RESET_ALL} in the chest')
+                    print(f'There is no {label} in the chest')
 
         elif not current_location.item or label != current_location.item.__dict__['label']:
             print(f'There is no {label} here')

@@ -1,7 +1,7 @@
 enemies = [
     {
         'name': 'skeleton',
-        'pos': (4, 1),
+        'pos': (0, 0),
         'ap': 3,
         'dp': 0,
         'hp': 5,
@@ -9,7 +9,7 @@ enemies = [
     },
     {
         'name': 'ghoul',
-        'pos': (2, 3),
+        'pos': (0, 0),
         'ap': 3,
         'dp': 0,
         'hp': 10,
@@ -17,7 +17,7 @@ enemies = [
     },
     {
         'name': 'giant lizard',
-        'pos': (0, 1),
+        'pos': (0, 0),
         'ap': 5,
         'dp': 0,
         'hp': 7,
@@ -25,7 +25,7 @@ enemies = [
     },
     {
         'name': 'giant spider',
-        'pos': (1, 0),
+        'pos': (0, 0),
         'ap': 6,
         'dp': 0,
         'hp': 5,
