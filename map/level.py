@@ -1,5 +1,4 @@
 import random
-
 from assets.actors.enemy import Enemy
 from assets.battle import Battle
 from assets.item import Item

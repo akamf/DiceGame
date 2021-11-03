@@ -1,4 +1,7 @@
-class Actor:
+from abc import ABC
+
+
+class Actor(ABC):
     def __init__(self, name: str, pos: tuple, ap: int, dp: int, hp: int, level: int):
         self.__name = name
         self.__position = ActorPosition(*pos)
