@@ -72,32 +72,6 @@ weapons_and_armors = [
         'storage': 'hand',
         'position': None
     },
-    {
-        'label': 'knife',
-        'description': 'short knife',
-        'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'This knife has a venomous tip.\n'
-                 'It will poison your enemy and make it lose 1 health point per battle round',
-        'storage': 'hand',
-        'position': None
-    },
-    {
-        'label': 'sword',
-        'description': 'short sword',
-        'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'It\'s a rusty old sword.\nThe chance of a critical hit doubles with this sword',
-        'storage': 'hand',
-        'position': None
-    },
-    {
-        'label': 'axe',
-        'description': 'tree cutter\'s axe',
-        'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'It\'s an axe with a wooden shaft.\n'
-                 'This axe will crack open any enemy armor, and deal damage directly on the enemy',
-        'storage': 'hand',
-        'position': None
-    },
 ]
 
 key_items = [
@@ -137,4 +111,34 @@ key_items = [
         'requirements': 'rusty key',
         'position': (0, 0)
     }
+]
+
+# Currently unused items, will hopefully be implemented later when I have time
+unused_items = [
+    {
+        'label': 'knife',
+        'description': 'short knife',
+        'actions': ['get', 'drop', 'check', 'investigate'],
+        'bonus': 'This knife has a venomous tip.\n'
+                 'It will poison your enemy and make it lose 1 health point per battle round',
+        'storage': 'hand',
+        'position': None
+    },
+    {
+        'label': 'sword',
+        'description': 'short sword',
+        'actions': ['get', 'drop', 'check', 'investigate'],
+        'bonus': 'It\'s a rusty old sword.\nThe chance of a critical hit doubles with this sword',
+        'storage': 'hand',
+        'position': None
+    },
+    {
+        'label': 'axe',
+        'description': 'tree cutter\'s axe',
+        'actions': ['get', 'drop', 'check', 'investigate'],
+        'bonus': 'It\'s an axe with a wooden shaft.\n'
+                 'This axe will crack open any enemy armor, and deal damage directly on the enemy',
+        'storage': 'hand',
+        'position': None
+    },
 ]

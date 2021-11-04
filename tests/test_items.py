@@ -3,9 +3,10 @@ from unittest.mock import patch
 
 from assets.actors.enemy import Enemy
 from assets.actors.player import Player
+from assets.battle import Battle
 from assets.item import Item
 from data.enemy_data import enemies
-from data.item_data import usable_items, key_items
+from data.item_data import usable_items, key_items, weapons_and_armors
 from map.cell import Cell
 from map.level import Level
 
@@ -65,17 +66,13 @@ class TestItems(unittest.TestCase):
 
         self.assertTrue(level.level_complete)
 
-    @patch('builtins.input', return_value='open chest')
-    def test_rusty_key(self, input):
+    def test_lantern(self):
         player = Player()
-        player.inventory.pouch.append(Item(**key_items[1]))
+        player.inventory.right_hand = Item(**usable_items[0])
 
         level = Level(1, (5, 5), player)
-        level.maze.get_cell(*player.get_actor_position())\
-            .set_item([Item(**item) for item in key_items if item['label'] == 'chest'])
-        level.process_user_input()
 
-        self.assertTrue(level.maze.get_cell(*player.get_actor_position()).item.__dict__['open'])
+        self.assertNotEqual(level.print_maze_info(), 'The area is very dark!')
 
 
 if __name__ == '__main__':

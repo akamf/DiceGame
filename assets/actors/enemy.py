@@ -8,5 +8,4 @@ class Enemy(Actor):
         super().__init__(**self.__dict__)
 
     def __setattr__(self, key, value):
-        print(key, value)
         object.__setattr__(self, key, value)

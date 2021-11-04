@@ -7,15 +7,6 @@ from data.item_data import key_items, usable_items
 from map.maze import Maze
 
 
-def print_player_location_in_maze(game):
-    """
-    Debug function to see the players position
-    The map is dynamic and changes for every run, which makes this very handy!
-    """
-    print('X Y')
-    print(*game.player.get_actor_position())
-
-
 class Level:
     def __init__(self, level: int, maze_size: tuple, player):
         self.battle = None
@@ -27,15 +18,13 @@ class Level:
     def run_level(self):
         while not self.level_complete and self.player.alive:
             self.print_maze_info()
-            print_player_location_in_maze(self)
             self.process_user_input()
 
     @staticmethod
     def level_items() -> set:
         """
-        First th method creates a list of all usable items. Then it chooses three random items from that list.
-        Finally it adds all key items to the item set.
-        :return: A set of the items in this level
+        Method to set which items to appear in the maze
+        :return: set
         """
         items = [Item(**item) for item in usable_items]
         level_items = {random.choice(items) for _ in range(3)}
@@ -43,7 +32,10 @@ class Level:
         return level_items
 
     def process_user_input(self):
-        """Process the users input, and through a matching pattern decide what method(s) to call"""
+        """
+        Main method. Process the users input, and through a matching pattern decide what method(s) to call
+        :return: None
+        """
         current_location = self.maze.get_cell(*self.player.get_actor_position())
         command = input('>> ')
 
@@ -93,6 +85,11 @@ class Level:
                 print(f'I don\'t understand {command}...')
 
     def open_chest(self, chest):
+        """
+        Method to open a chest
+        :param chest: Item instance
+        :return: None
+        """
         if chest.__dict__['label'] == 'chest':
             chest.__dict__['open'] = True
             print(f'The {chest.__dict__["description"]} is open and contains the following: ')
@@ -111,6 +108,11 @@ class Level:
                     print(f'I don\'t understand {command}...')
 
     def investigate_item(self, label: str) -> str:
+        """
+        Method to investigate an item further, if possible
+        :param label: str, label of the item
+        :return: str
+        """
         if self.maze.get_cell(*self.player.get_actor_position()).got_item:
             item = self.maze.get_cell(*self.player.get_actor_position()).item
             if label == item.__dict__['label'] and 'investigate' in item.__dict__['actions']:
@@ -124,8 +126,9 @@ class Level:
 
     def engaged_in_battle(self, direction: str):
         """
-        Check if the player is engaged in battle after it's movement. Aka is there an enemy in the new cell
-        :param direction: The direction which the player came from
+        Check if the player is engaged in battle after it's movement, aka if there's a enemy in the new cell
+        :param direction: str, the direction the player moved
+        :return: None
         """
         if self.maze.get_cell(*self.player.get_actor_position()).enemy:
             print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'

@@ -27,8 +27,8 @@ class Maze:
         """
         Checks the current cells neighbours by decrement or increment it's x and y value
         If the neighbouring cell is inside the map, it appends to the neighbour list
-        :param cell: Current cell
-        :return: A list of all valid neighbours
+        :param cell: Cell instance, current cell
+        :return: list
         """
         neighbours = []
 
@@ -43,10 +43,9 @@ class Maze:
 
     def create_maze(self):
         """
-        Function to create the map.
-        The function checks the neighbouring cells and moves in random direction by removing the wall
-        between the current and the next cell.
-        If the neighbouring cell is a dead end, it backtracks to the last "unvisited" neighbouring cell
+        The method checks the neighbouring cells and moves in random direction by removing the wall between the current
+        and the next cell. If the neighbouring cell is a dead end, it backtracks to the last "unvisited" neighbour
+        :return None
         """
         total_cells = self.num_of_cells_x * self.num_of_cells_y
         cell_stack = []
@@ -67,8 +66,13 @@ class Maze:
             created_cells += 1
 
     def generate_locations(self, items: set, enemies: set) -> list:
+        """
+        Method to generate random locations for items and enemies
+        :param items: set, items for the current maze
+        :param enemies: set, enemies in the current maze
+        :return: list
+        """
         locations = []
-
         for _ in range(len(enemies) + len(items)):
             (x, y) = (random.randrange(0, self.num_of_cells_x), random.randrange(0, self.num_of_cells_y))
             while (x, y) in locations or (x, y) == self.maze_end or (x, y) == (self.start_x, self.start_y):
@@ -78,6 +82,13 @@ class Maze:
         return locations
 
     def set_item_and_enemies_in_location(self, locations: list, items: set, enemies: set):
+        """
+        Method to set items and enemies at their new locations
+        :param locations: list, valid locations
+        :param items: set, items for the current maze
+        :param enemies: set, enemies in the current maze
+        :return: None
+        """
         cnt = 0
 
         for enemy in enemies:
@@ -96,4 +107,3 @@ class Maze:
             for cell in line:
                 cell.set_item(list(items))
                 cell.set_enemy(list(enemies))
-                print((cell.x, cell.y), cell.got_item)

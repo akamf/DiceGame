@@ -15,7 +15,7 @@ class Game:
             self.maze_size = self.update_maze_size()
             self.level = Level(self.current_level, self.maze_size, self.player)
             self.level.run_level()
-            self.player.reset_player_stats()
+            self.player.update_player_stats()
 
     def update_maze_size(self) -> tuple:
         if self.current_level % 5 == 0:

@@ -6,12 +6,15 @@ from map.maze import DIRECTIONS
 
 class Player(Actor):
     def __init__(self):
-        super().__init__('player', (0, 0), 0, 0, 10, 1)
+        super().__init__('player', (0, 0), 0, 0, 20, 1)
         self.inventory = Inventory()
         self.alive = True
 
     def go(self, direction: str):
-        """Update player position, based on a constant value from DIRECTIONS"""
+        """
+        Update player position, based on a constant value from DIRECTIONS
+        :return None
+        """
         for value in DIRECTIONS:
             if value[0] == direction:
                 self.set_actor_position(value[1])
@@ -19,9 +22,10 @@ class Player(Actor):
     def pick_up_item(self, label: str, current_location, chest=None):
         """
         Pick up an item from the current location, or from a chest, and append it to the players inventory
-        :param label: The item to get
-        :param current_location: The players current location
-        :param chest: Chest to get item from, None as default
+        :param label: str, label of the item to get
+        :param current_location: Cell instance, the players current location
+        :param chest: Item instance, chest to get an item from
+        :return None
         """
         if chest:
             for item in chest.__dict__['contains']:
@@ -39,8 +43,9 @@ class Player(Actor):
     def drop_item(self, label: str, current_location):
         """
         Drop an item from the players inventory
-        :param label: The label of the item to drop
-        :param current_location: The players current location
+        :param label: str, the label of the item to drop
+        :param current_location: Cell instance, the players current location
+        :return None
         """
         found_item = None
         if not current_location.got_item:
@@ -60,6 +65,12 @@ class Player(Actor):
             print(f'You can\'t drop the {label}, you should have thought of this earlier')
 
     def use_battle_item(self, label: str, enemy):
+        """
+        Method to use items in a battle situation
+        :param label: str, the label of the item
+        :param enemy: Enemy instance, current enemy
+        :return: None
+        """
         if self.inventory.item_in_inventory(label):
             match label:
                 case 'potion':
@@ -80,7 +91,12 @@ class Player(Actor):
                                   f'You lose {enemy.attack_points} health points!')
                             self.health_points -= enemy.attack_points
 
-    def reset_player_stats(self):
+    def update_player_stats(self):
+        """
+        Update player stats when the level is completed
+        :return: None
+        """
         self.set_actor_position((0, 0))
         self.inventory = Inventory()
+        self.health_points += 10
         self.level += 1

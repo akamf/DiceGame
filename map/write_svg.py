@@ -1,14 +1,12 @@
 def write_map(maze, out_file: str):
     """
-    Write an map, as an SVG (Scalable Vector Graphics) image, of the map
-    :param maze: The maze to write to SVG
-    :param out_file: The file name for the output file
+    Write an map as an SVG (Scalable Vector Graphics) image of the map
+    :param maze: Maze instance, the maze to write to SVG
+    :param out_file: str, the file name for the output file
+    :return None
     """
 
     def write_wall(wall_f, wall_x1, wall_y1, wall_x2, wall_y2):
-        """
-        Write a single wall to the SVG image
-        """
         print('<line x1="{}" y1="{}" x2="{}" y2="{}"/>'
               .format(wall_x1, wall_y1, wall_x2, wall_y2), file=wall_f)
 
