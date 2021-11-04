@@ -1,5 +1,5 @@
-from map.level import Level
 from assets.actors.player import Player
+from map.level import Level
 
 
 class Game:

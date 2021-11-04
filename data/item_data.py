@@ -56,11 +56,10 @@ usable_items = [
 weapons_and_armors = [
     {
         'label': 'sword',
-        'description': 'two-handed sword',
+        'description': 'short sword',
         'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'This well crafted two-handed sword, with a dragon engraved on it\'s blade'
-                 'It will give you double attack points. But it needs both your hands tho, '
-                 'and can therefore not be paired with a shield!',
+        'bonus': 'This well crafted sword, with a dragon engraved on it\'s blade'
+                 'It will give you double attack points.',
         'storage': 'hand',
         'position': None
     },
@@ -126,9 +125,10 @@ unused_items = [
     },
     {
         'label': 'sword',
-        'description': 'short sword',
+        'description': 'two-handed sword',
         'actions': ['get', 'drop', 'check', 'investigate'],
-        'bonus': 'It\'s a rusty old sword.\nThe chance of a critical hit doubles with this sword',
+        'bonus': ' But it needs both your hands tho, '
+                 'and can therefore not be paired with a shield!',
         'storage': 'hand',
         'position': None
     },

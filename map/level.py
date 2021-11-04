@@ -1,10 +1,19 @@
 import random
+
 from assets.actors.enemy import Enemy
 from assets.battle import Battle
 from assets.item import Item
 from data.enemy_data import enemies
 from data.item_data import key_items, usable_items
 from map.maze import Maze
+
+
+OPPOSITE_DIRECTION = [
+    ('north', 'south'),
+    ('south', 'north'),
+    ('east', 'west'),
+    ('west', 'east'),
+]
 
 
 class Level:
@@ -16,9 +25,13 @@ class Level:
         self.player = player
 
     def run_level(self):
+        self.print_maze_info(None)
         while not self.level_complete and self.player.alive:
-            self.print_maze_info()
             self.process_user_input()
+
+        if self.player.alive:
+            print('You enter a new maze. You\'re pouch will lose it\'s belongings, but the items in your hands will'
+                  ' remain. You will also gain some extra health points for your journey. Good luck!\n')
 
     @staticmethod
     def level_items() -> set:
@@ -36,12 +49,17 @@ class Level:
         Main method. Process the users input, and through a matching pattern decide what method(s) to call
         :return: None
         """
+        came_from = None
         current_location = self.maze.get_cell(*self.player.get_actor_position())
         command = input('>> ')
 
         match command.lower().split():
             case ['go', direction] if direction in current_location.walls and not current_location.walls[direction]:
                 print('You go further in the maze!')
+                for i in OPPOSITE_DIRECTION:
+                    if direction == i[0]:
+                        came_from = i[1]
+                        break
                 self.player.go(direction)
                 self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
@@ -53,8 +71,7 @@ class Level:
                 self.player.drop_item(item, current_location)
             case ['check', item]:
                 if current_location.item and 'check' in current_location.item.__dict__['actions']:
-                    print(f'You pick up and look at the {item}\n'
-                          f'It\'s a {current_location.item.__dict__["description"]}')
+                    print(f'You look at the {item}\nIt\'s a {current_location.item.__dict__["description"]}')
                 else:
                     print(f'You can\'t check that out.')
             case ['investigate', item]:
@@ -69,7 +86,7 @@ class Level:
                             case 'chest':
                                 self.open_chest(current_location.item)
                             case 'door':
-                                print('You open the door and move to the next area!')
+                                print('You open the door and move further!\n')
                                 self.level_complete = True
                             case _:
                                 print(f'I can\'t understand "open {item}"')
@@ -83,6 +100,9 @@ class Level:
 
             case _:
                 print(f'I don\'t understand {command}...')
+
+        if not self.level_complete and self.player.alive:
+            self.print_maze_info(came_from)
 
     def open_chest(self, chest):
         """
@@ -132,10 +152,13 @@ class Level:
         """
         if self.maze.get_cell(*self.player.get_actor_position()).enemy:
             print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'
-                  f'\nPREPARE TO FIGHT!')
+                  f'\nPREPARE TO FIGHT!', end='')
             self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), direction, self.player)
 
-    def print_maze_info(self):
+    def print_maze_info(self, came_from: str):
+        if came_from:
+            print(f'You came from {came_from}')
+
         if self.player.inventory.item_in_inventory('lantern'):
             print('You\'ve got the lantern. It lights up your surroundings.\nYou can go: ')
             for direction in self.maze.get_cell(*self.player.get_actor_position()).walls:
@@ -148,4 +171,3 @@ class Level:
             print('The area is very dark!')
             if self.maze.get_cell(*self.player.get_actor_position()).got_item:
                 print('There is something in this room, maybe check it out?')
-

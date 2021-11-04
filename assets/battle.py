@@ -102,7 +102,9 @@ class Battle:
                     self.battle_round(current_location, player)
                 case ['use', item]:
                     player.use_battle_item(item, current_location.enemy)
-                    self.set_battle_stats(current_location, player)
+                    player.attack_points = 0
+                    player.defend_points = 0
+                    self.print_battle_stats(current_location, player)
                     self.battle_round(current_location, player)
                 case ['run'] | ['run', 'back'] | ['run', 'away'] | ['escape']:
                     self.escape_battle(last_direction, player)

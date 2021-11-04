@@ -98,6 +98,6 @@ class Player(Actor):
         :return: None
         """
         self.set_actor_position((0, 0))
-        self.inventory = Inventory()
+        self.inventory.pouch.clear()
         self.health_points += 10
         self.level += 1
