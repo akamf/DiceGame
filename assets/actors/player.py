@@ -7,6 +7,7 @@ from map.maze import DIRECTIONS
 class Player(Actor):
     def __init__(self):
         super().__init__('player', (0, 0), 0, 0, 20, 1)
+        self.score = 0
         self.inventory = Inventory()
         self.alive = True
 
@@ -101,3 +102,4 @@ class Player(Actor):
         self.inventory.pouch.clear()
         self.health_points += 10
         self.level += 1
+        self.score += (50 * self.level)

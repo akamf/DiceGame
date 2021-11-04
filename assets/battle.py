@@ -18,6 +18,7 @@ class Battle:
         """
         if current_location.enemy.health_points <= 0:
             print(f'You defeated the {current_location.enemy.get_actor_name()}!')
+            player.score += (10 * current_location.enemy.level)
             current_location.enemy = None
             return False
         elif player.health_points <= 0:
@@ -77,6 +78,8 @@ class Battle:
             match dice:
                 case 'shield':
                     player.defend_points += 1 * 2 if player.inventory.item_in_inventory('shield') else 1
+                case 'double shield':
+                    player.defend_points += 2 * 2 if player.inventory.item_in_inventory('shield') else 2
                 case 'sword':
                     player.attack_points += 1 * 2 if player.inventory.item_in_inventory('sword') else 1
                 case 'double sword':

@@ -30,8 +30,9 @@ class Level:
             self.process_user_input()
 
         if self.player.alive:
-            print('You enter a new maze. You\'re pouch will lose it\'s belongings, but the items in your hands will'
-                  ' remain. You will also gain some extra health points for your journey. Good luck!\n')
+            print(f'You enter a new maze. Your current score is {self.player.score}, well done!\n\n'
+                  f'FOR YOUR INFORMATION: You\'re pouch will lose it\'s belongings, but the items in your hands will'
+                  f' remain. You will also gain some extra health points for your journey. Good luck!\n')
 
     @staticmethod
     def level_items() -> set:
@@ -97,6 +98,8 @@ class Level:
 
             case ['inventory']:
                 self.player.inventory.print_inventory()
+            case ['quit']:
+                self.player.alive = False
 
             case _:
                 print(f'I don\'t understand {command}...')
@@ -152,7 +155,8 @@ class Level:
         """
         if self.maze.get_cell(*self.player.get_actor_position()).enemy:
             print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'
-                  f'\nPREPARE TO FIGHT!', end='')
+                  f'\nTime to roll those dices!\nRemember: "Each SHIELD gets you 1 defend point and '
+                  f'each SWORD gets you 1 attack point"', end='')
             self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), direction, self.player)
 
     def print_maze_info(self, came_from: str):

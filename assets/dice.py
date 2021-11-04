@@ -10,7 +10,7 @@ class Dice:
             'double sword',
             'double sword',
             'shield',
-            'shield'
+            'double shield'
         ]
 
     def roll_dices(self, num_of_dices: int) -> list:

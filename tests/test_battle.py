@@ -5,7 +5,7 @@ from assets.actors.enemy import Enemy
 from assets.actors.player import Player
 from assets.battle import Battle
 from data.enemy_data import enemies
-from map.level import Level
+from mainfiles.level import Level
 
 
 class TestBattle(unittest.TestCase):
