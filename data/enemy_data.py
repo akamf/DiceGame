@@ -2,7 +2,7 @@ enemies = [
     {
         'name': 'skeleton',
         'pos': (0, 0),
-        'ap': 3,
+        'ap': 1,
         'dp': 0,
         'hp': 5,
         'level': 0
@@ -10,7 +10,7 @@ enemies = [
     {
         'name': 'ghoul',
         'pos': (0, 0),
-        'ap': 3,
+        'ap': 2,
         'dp': 0,
         'hp': 10,
         'level': 0
@@ -20,7 +20,7 @@ enemies = [
         'pos': (0, 0),
         'ap': 5,
         'dp': 0,
-        'hp': 7,
+        'hp': 6,
         'level': 0
     },
     {

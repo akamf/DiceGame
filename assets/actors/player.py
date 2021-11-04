@@ -81,6 +81,7 @@ class Player(Actor):
                 case 'pill':
                     effect = random.choice(['cursed', 'lucky'])
                     print(f'You consume the dark pill and you\'re {effect}!')
+                    self.inventory.remove_pouch_item(label)
 
                     match effect:
                         case 'lucky':

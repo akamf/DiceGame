@@ -100,6 +100,8 @@ class Inventory:
                 else:
                     current_location.item = None
                     current_location.got_item = False
+        else:
+            print('Your inventory is full!')
 
     def print_inventory(self):
         """
