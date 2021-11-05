@@ -1,5 +1,5 @@
 from assets.actors.player import Player
-from data.high_score import HighScoreBoard
+from data.high_scores.high_score import HighScoreBoard
 from mainfiles.level import Level
 
 
@@ -18,7 +18,6 @@ class Game:
             self.level = Level(self.current_level, self.maze_size, self.player)
             self.level.run_level()
             self.player.update_player_stats()
-        # self.check_high_score()
 
     def update_maze_size(self) -> tuple:
         if self.current_level % 5 == 0:
