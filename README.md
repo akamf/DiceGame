@@ -12,4 +12,6 @@ To install dependencies from the requirements-file with pip:
 pip install -r requirements.txt
 ```
 
+
+
 28/03 2022 __Basic Python Programming__ - _Teknikhögskolan_
