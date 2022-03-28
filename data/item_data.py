@@ -1,5 +1,5 @@
 import random
-from assets.item import Item
+from application.assets.item import Item
 
 usable_items = [
     {

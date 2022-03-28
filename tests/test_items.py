@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import patch
 
-from assets.actors.enemy import Enemy
-from assets.actors.player import Player
-from assets.item import Item
+from application.assets.actors import Enemy
+from application.assets.actors.player import Player
+from application.assets.item import Item
 from data.enemy_data import enemies
 from data.item_data import usable_items, key_items
-from map.cell import Cell
-from mainfiles.level import Level
+from application.bll.map.cell import Cell
+from application.level import Level
 
 
 class TestItemFunctions(unittest.TestCase):

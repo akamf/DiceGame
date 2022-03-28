@@ -1,6 +1,6 @@
 import random
-from map.cell import Cell
-from map.write_svg import write_map
+from application.bll.map.cell import Cell
+from application.bll.map.write_svg import write_map
 
 DIRECTIONS = [
     ('north', (0, -1)),

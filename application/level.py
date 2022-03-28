@@ -1,11 +1,11 @@
 import random
 
-from assets.actors.enemy import Enemy
-from assets.battle import Battle
-from assets.item import Item
+from application.assets.actors import Enemy
+from application.assets.battle import Battle
+from application.assets.item import Item
 from data.enemy_data import enemies
 from data.item_data import key_items, usable_items
-from map.maze import Maze
+from application.bll.map.maze import Maze
 
 
 OPPOSITE_DIRECTION = [
