@@ -1,4 +1,4 @@
-from application.assets.actors.actor import Actor
+from application.bll.assets.actors.actor import Actor
 
 
 class Enemy(Actor):

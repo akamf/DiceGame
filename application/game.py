@@ -1,5 +1,5 @@
-from application.assets.actors.player import Player
-from data.high_scores.high_score import HighScoreBoard
+from application.bll.assets import Player
+from application.dll.data.high_scores.high_score import HighScoreBoard
 from application.level import Level
 
 

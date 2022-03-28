@@ -1,10 +1,10 @@
 import random
 
-from application.assets.actors import Enemy
-from application.assets.battle import Battle
-from application.assets.item import Item
-from data.enemy_data import enemies
-from data.item_data import key_items, usable_items
+from application.bll.assets import Enemy
+from application.bll.assets.battle import Battle
+from application.bll.assets import Item
+from application.dll.data import enemies
+from application.dll.data import key_items, usable_items
 from application.bll.map.maze import Maze
 
 

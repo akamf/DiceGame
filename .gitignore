@@ -2,5 +2,6 @@
 venv/
 __pycache__/
 maze.svg
-data/high_scores/high_scores.taf
+application/dll/data/high_scores/high_scores.taf
 .env
+/docker

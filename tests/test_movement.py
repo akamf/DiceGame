@@ -1,5 +1,5 @@
 import unittest
-from application.assets.actors.player import Player
+from application.bll.assets import Player
 from application.bll.map.cell import Cell
 
 
