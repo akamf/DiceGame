@@ -1,5 +1,5 @@
-from src.assets import Player
-from src.assets.high_scores import HighScoreBoard
+from src.assets.actors.player import Player
+from src.assets.high_scores.high_score import HighScoreBoard
 from src.level import Level
 
 
