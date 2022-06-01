@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
 
-from assets.actors.enemy import Enemy
-from assets.actors.player import Player
-from assets.battle import Battle
-from data.enemy_data import enemies
-from mainfiles.level import Level
+from src.assets import Enemy
+from src.assets import Player
+from src.assets import Battle
+from src.database.data import enemies
+from src.level import Level
 
 
 class TestBattle(unittest.TestCase):

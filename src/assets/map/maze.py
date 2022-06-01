@@ -1,6 +1,6 @@
 import random
-from map.cell import Cell
-from map.write_svg import write_map
+from src.assets.map.cell import Cell
+from src.assets.map.write_svg import write_map
 
 DIRECTIONS = [
     ('north', (0, -1)),

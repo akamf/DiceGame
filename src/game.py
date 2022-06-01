@@ -1,6 +1,6 @@
-from assets.actors.player import Player
-from data.high_scores.high_score import HighScoreBoard
-from mainfiles.level import Level
+from src.assets import Player
+from src.assets.high_scores import HighScoreBoard
+from src.level import Level
 
 
 class Game:

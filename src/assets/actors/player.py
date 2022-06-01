@@ -1,7 +1,7 @@
 import random
-from assets.actors.actor import Actor
-from assets.inventory import Inventory
-from map.maze import DIRECTIONS
+from src.assets.actors.actor import Actor
+from src.assets.inventory import Inventory
+from src.assets.map import DIRECTIONS
 
 
 class Player(Actor):

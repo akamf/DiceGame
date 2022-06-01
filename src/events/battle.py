@@ -1,5 +1,5 @@
 from time import sleep
-from assets.dice import Dice
+from src.assets.dice import Dice
 
 
 class Battle:
