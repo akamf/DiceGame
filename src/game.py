@@ -1,6 +1,6 @@
-from application.bll.assets import Player
-from application.dll.data.high_scores.high_score import HighScoreBoard
-from application.level import Level
+from src.assets import Player
+from src.assets.high_scores import HighScoreBoard
+from src.level import Level
 
 
 class Game:

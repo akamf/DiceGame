@@ -1,11 +1,11 @@
 import random
 
-from application.bll.assets import Enemy
-from application.bll.assets.battle import Battle
-from application.bll.assets import Item
-from application.dll.data import enemies
-from application.dll.data import key_items, usable_items
-from application.bll.map.maze import Maze
+from src.assets import Enemy
+from src.assets import Battle
+from src.assets import Item
+from src.database.data import enemies
+from src.database.data import key_items, usable_items
+from src.assets.map import Maze
 
 
 OPPOSITE_DIRECTION = [

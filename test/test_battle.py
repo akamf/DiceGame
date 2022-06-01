@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
 
-from application.bll.assets import Enemy
-from application.bll.assets import Player
-from application.bll.assets.battle import Battle
-from application.dll.data import enemies
-from application.level import Level
+from src.assets import Enemy
+from src.assets import Player
+from src.assets import Battle
+from src.database.data import enemies
+from src.level import Level
 
 
 class TestBattle(unittest.TestCase):

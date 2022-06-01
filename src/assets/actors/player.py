@@ -1,7 +1,7 @@
 import random
-from application.bll.assets.actors.actor import Actor
-from application.bll.assets.inventory import Inventory
-from application.bll.map.maze import DIRECTIONS
+from src.assets.actors.actor import Actor
+from src.assets.inventory import Inventory
+from src.assets.map import DIRECTIONS
 
 
 class Player(Actor):

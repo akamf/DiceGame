@@ -1,5 +1,5 @@
-from application.dll.db import init_db
-from application.game import Game
+from src.database.init_db import init_db
+from src.game import Game
 from dotenv import load_dotenv
 
 

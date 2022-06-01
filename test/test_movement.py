@@ -1,6 +1,6 @@
 import unittest
-from application.bll.assets import Player
-from application.bll.map.cell import Cell
+from src.assets import Player
+from src.assets.map import Cell
 
 
 class TestMovement(unittest.TestCase):

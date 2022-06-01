@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import patch
 
-from application.bll.assets import Enemy
-from application.bll.assets import Player
-from application.bll.assets import Item
-from application.dll.data import enemies
-from application.dll.data import usable_items, key_items
-from application.bll.map.cell import Cell
-from application.level import Level
+from src.assets import Enemy
+from src.assets import Player
+from src.assets import Item
+from src.database.data import enemies
+from src.database.data import usable_items, key_items
+from src.assets.map import Cell
+from src.level import Level
 
 
 class TestItemFunctions(unittest.TestCase):

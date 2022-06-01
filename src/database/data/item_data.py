@@ -1,5 +1,5 @@
 import random
-from application.bll.assets.item import Item
+from src.assets import Item
 
 usable_items = [
     {
