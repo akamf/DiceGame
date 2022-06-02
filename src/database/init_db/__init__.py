@@ -9,7 +9,12 @@ def add_db_user(mongo_client: MongoClient, username: str, password: str, databas
     mongo_client.DiceGameDatabase.command(
         'createUser', username,
         pwd=password,
-        roles=[{'role': 'readWrite', 'init_db': database}]
+        roles=[
+            {
+                'role': 'readWrite',
+                'init_db': database
+            }
+        ]
     )
 
 
@@ -29,6 +34,4 @@ def init_db():
 
     client = MongoClient(f'mongodb://{username}:{password}@{host}:{port}')
     db = client[database]
-
-    # add_db_user(client, username, password, database)
 

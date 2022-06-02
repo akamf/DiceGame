@@ -1,11 +1,11 @@
 import random
 
-from src.assets import Enemy
-from src.assets import Battle
-from src.assets import Item
-from src.database.data import enemies
-from src.database.data import key_items, usable_items
-from src.assets.map import Maze
+from src.assets.actors.enemy import Enemy
+from src.events.battle import Battle
+from src.assets.item import Item
+from src.database.data.enemy_data import enemies
+from src.database.data.item_data import key_items, usable_items
+from src.assets.map.maze import Maze
 
 
 OPPOSITE_DIRECTION = [
