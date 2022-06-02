@@ -1,11 +1,11 @@
 import random
 
 from src.assets.actors.enemy import Enemy
-from src.events.battle import Battle
 from src.assets.item import Item
-from src.database.data.enemy_data import enemies
-from src.database.data.item_data import key_items, usable_items
 from src.assets.map.maze import Maze
+from src.events.battle import Battle
+
+import src.db.controller as controller
 
 
 OPPOSITE_DIRECTION = [
@@ -20,7 +20,7 @@ class Level:
     def __init__(self, level: int, maze_size: tuple, player):
         self.battle = None
         self.level_complete = False
-        self.enemies = {Enemy(level, **random.choice(enemies)) for _ in range(maze_size[0])}
+        self.enemies = {Enemy(level, **random.choice(controller.get_all_enemies())) for _ in range(maze_size[0])}
         self.maze = Maze(*maze_size, self.level_items(), self.enemies)
         self.player = player
 
@@ -40,9 +40,9 @@ class Level:
         Method to set which items to appear in the maze
         :return: set
         """
-        items = [Item(**item) for item in usable_items]
+        items = [Item(**item) for item in controller.get_all_items_from_type('usable item')]
         level_items = {random.choice(items) for _ in range(3)}
-        level_items.update({Item(**item) for item in key_items})
+        level_items.update({Item(**item) for item in controller.get_all_items_from_type('key item')})
         return level_items
 
     def process_user_input(self):

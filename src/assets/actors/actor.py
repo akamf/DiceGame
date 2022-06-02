@@ -2,12 +2,12 @@ from abc import ABC
 
 
 class Actor(ABC):
-    def __init__(self, name: str, pos: tuple, ap: int, dp: int, hp: int, level: int):
+    def __init__(self, name: str, pos: tuple, attack_points: int, defend_points: int, health_points: int, level: int):
         self.__name = name
         self.__position = ActorPosition(*pos)
-        self.attack_points = ap
-        self.defend_points = dp
-        self.health_points = hp
+        self.attack_points = attack_points
+        self.defend_points = defend_points
+        self.health_points = health_points
         self.level = level
 
     def set_actor_name(self, name: str):
