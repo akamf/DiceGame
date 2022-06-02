@@ -4,8 +4,8 @@ from unittest.mock import patch
 from src.assets import Enemy
 from src.assets import Player
 from src.assets import Battle
-from src.database.data import enemies
-from src.level import Level
+from src.db.data import enemies
+from src.assets.level import Level
 
 
 class TestBattle(unittest.TestCase):

@@ -1,11 +1,11 @@
 import random
 
-from src.assets.actors.enemy import Enemy
-from src.events.battle import Battle
+from src.assets.actor.enemy import Enemy
 from src.assets.item import Item
-from src.database.data.enemy_data import enemies
-from src.database.data.item_data import key_items, usable_items
 from src.assets.map.maze import Maze
+from src.assets.battle import Battle
+
+import src.db.controller as controller
 
 
 OPPOSITE_DIRECTION = [
@@ -17,10 +17,10 @@ OPPOSITE_DIRECTION = [
 
 
 class Level:
-    def __init__(self, level: int, maze_size: tuple, player):
+    def __init__(self, level: int, maze_size: tuple, player) -> None:
         self.battle = None
         self.level_complete = False
-        self.enemies = {Enemy(level, **random.choice(enemies)) for _ in range(maze_size[0])}
+        self.enemies = [Enemy(level, **random.choice(controller.get_all_enemies())) for _ in range(maze_size[0])]
         self.maze = Maze(*maze_size, self.level_items(), self.enemies)
         self.player = player
 
@@ -35,23 +35,23 @@ class Level:
                   f' remain. You will also gain some extra health points for your journey. Good luck!\n')
 
     @staticmethod
-    def level_items() -> set:
+    def level_items() -> list:
         """
         Method to set which items to appear in the maze
         :return: set
         """
-        items = [Item(**item) for item in usable_items]
+        items = [Item(**item) for item in controller.get_all_items_from_type('usable item')]
         level_items = {random.choice(items) for _ in range(3)}
-        level_items.update({Item(**item) for item in key_items})
-        return level_items
+        level_items.update({Item(**item) for item in controller.get_all_items_from_type('key item')})
+        return list(level_items)
 
-    def process_user_input(self):
+    def process_user_input(self) -> None:
         """
         Main method. Process the users input, and through a matching pattern decide what method(s) to call
         :return: None
         """
         came_from = None
-        current_location = self.maze.get_cell(*self.player.get_actor_position())
+        current_location = self.maze.get_cell(*self.player.position)
         command = input('>> ')
 
         match command.lower().split():
@@ -61,7 +61,7 @@ class Level:
                     if direction == i[0]:
                         came_from = i[1]
                         break
-                self.player.go(direction)
+                self.player.move(direction)
                 self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
@@ -123,7 +123,7 @@ class Level:
             command = input('>> ')
             match command.lower().split():
                 case ['get', item]:
-                    self.player.pick_up_item(item, self.maze.get_cell(*self.player.get_actor_position()), chest)
+                    self.player.pick_up_item(item, self.maze.get_cell(*self.player.position), chest)
                 case ['close'] | ['close', 'chest']:
                     print(f'You close the {chest.__dict__["description"]}')
                     chest.__dict__['open'] = False
@@ -136,42 +136,42 @@ class Level:
         :param label: str, label of the item
         :return: str
         """
-        if self.maze.get_cell(*self.player.get_actor_position()).got_item:
-            item = self.maze.get_cell(*self.player.get_actor_position()).item
+        if self.maze.get_cell(*self.player.position).got_item:
+            item = self.maze.get_cell(*self.player.position).item
             if label == item.__dict__['label'] and 'investigate' in item.__dict__['actions']:
                 return item.__dict__['bonus']
             elif 'investigate' not in item.__dict__['actions']:
                 return f'Can\'t investigate {item.__dict__["description"]} further!'
-            elif self.maze.get_cell(*self.player.get_actor_position()).got_item and label != item.__dict__['label']:
+            elif self.maze.get_cell(*self.player.position).got_item and label != item.__dict__['label']:
                 return f'There is no {label} here, but something else!'
         else:
             return 'There is nothing to investigate here!'
 
-    def engaged_in_battle(self, direction: str):
+    def engaged_in_battle(self, direction: str) -> None:
         """
         Check if the player is engaged in battle after it's movement, aka if there's a enemy in the new cell
         :param direction: str, the direction the player moved
         :return: None
         """
-        if self.maze.get_cell(*self.player.get_actor_position()).enemy:
-            print(f'You bumped into a {self.maze.get_cell(*self.player.get_actor_position()).enemy.get_actor_name()}'
+        if self.maze.get_cell(*self.player.position).enemy:
+            print(f'You bumped into a {self.maze.get_cell(*self.player.position).enemy.name}'
                   f'\nTime to roll those dices!\nRemember: "Each SHIELD gets you 1 defend point and '
                   f'each SWORD gets you 1 attack point"', end='')
-            self.battle = Battle(self.maze.get_cell(*self.player.get_actor_position()), direction, self.player)
+            self.battle = Battle(self.maze.get_cell(*self.player.position), direction, self.player)
 
-    def print_maze_info(self, came_from: str):
+    def print_maze_info(self, came_from: str) -> None:
         if came_from:
             print(f'You came from {came_from}')
 
         if self.player.inventory.item_in_inventory('lantern'):
             print('You\'ve got the lantern. It lights up your surroundings.\nYou can go: ')
-            for direction in self.maze.get_cell(*self.player.get_actor_position()).walls:
-                if not self.maze.get_cell(*self.player.get_actor_position()).walls[direction]:
+            for direction in self.maze.get_cell(*self.player.position).walls:
+                if not self.maze.get_cell(*self.player.position).walls[direction]:
                     print(f'* {direction}')
-            if self.maze.get_cell(*self.player.get_actor_position()).got_item:
+            if self.maze.get_cell(*self.player.position).got_item:
                 print(f'There is a '
-                      f'{self.maze.get_cell(*self.player.get_actor_position()).item.__dict__["description"]} here')
+                      f'{self.maze.get_cell(*self.player.position).item.__dict__["description"]} here')
         else:
             print('The area is very dark!')
-            if self.maze.get_cell(*self.player.get_actor_position()).got_item:
+            if self.maze.get_cell(*self.player.position).got_item:
                 print('There is something in this room, maybe check it out?')

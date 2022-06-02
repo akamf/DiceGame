@@ -34,4 +34,3 @@ def init_db():
 
     client = MongoClient(f'mongodb://{username}:{password}@{host}:{port}')
     db = client[database]
-

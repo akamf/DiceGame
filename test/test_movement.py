@@ -14,7 +14,7 @@ class TestMovement(unittest.TestCase):
 
         direction = 'east'
         if direction in start_cell.walls and not start_cell.walls[direction]:
-            player.go(direction)
+            player.move(direction)
 
         self.assertEqual(player.get_actor_position(), (east_cell.x, east_cell.y))
 
@@ -22,7 +22,7 @@ class TestMovement(unittest.TestCase):
 
         direction = 'south'
         if direction in start_cell.walls and not start_cell.walls[direction]:
-            player.go(direction)
+            player.move(direction)
 
         self.assertNotEqual(player.get_actor_position(), (south_cell.x, south_cell.y))
 

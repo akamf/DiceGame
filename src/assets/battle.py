@@ -3,7 +3,7 @@ from src.assets.dice import Dice
 
 
 class Battle:
-    def __init__(self, current_location, former_location, player):
+    def __init__(self, current_location, former_location, player) -> None:
         self.in_battle = True
         self.dice = Dice()
         self.battle(current_location, former_location, player)
@@ -17,17 +17,17 @@ class Battle:
         :return: bool
         """
         if current_location.enemy.health_points <= 0:
-            print(f'You defeated the {current_location.enemy.get_actor_name()}!')
+            print(f'You defeated the {current_location.enemy.name}!')
             player.score += (10 * current_location.enemy.level)
             current_location.enemy = None
             return False
         elif player.health_points <= 0:
-            print(f'The {current_location.enemy.get_actor_name()} defeated you!\nGAME OVER!')
+            print(f'The {current_location.enemy.name} defeated you!\nGAME OVER!')
             player.alive = False
             return False
         return True
 
-    def battle_round(self, current_location, player):
+    def battle_round(self, current_location, player) -> None:
         """
         Set and print the outcome of each battle round
         :param current_location: Cell instance, the players current location
@@ -36,7 +36,7 @@ class Battle:
         """
         current_location.enemy.health_points = current_location.enemy.health_points - player.attack_points\
             if current_location.enemy.health_points - player.attack_points > 0 else 0
-        print(f'You strike the {current_location.enemy.get_actor_name()} with {player.attack_points} attack points! '
+        print(f'You strike the {current_location.enemy.name} with {player.attack_points} attack points! '
               f'The enemy has {current_location.enemy.health_points} health points remaining')
         self.in_battle = self.player_in_battle(current_location, player)
 
@@ -45,7 +45,7 @@ class Battle:
             player.health_points = player.health_points - current_location.enemy.attack_points\
                 if player.health_points - current_location.enemy.attack_points > 0 else 0
 
-            print(f'The {current_location.enemy.get_actor_name()} strikes back and attack you with '
+            print(f'The {current_location.enemy.name} strikes back and attack you with '
                   f'{current_location.enemy.attack_points} attack points!')
             if player.defend_points > 0:
                 print(f'You block the attack with {player.defend_points} defend points!')
@@ -56,10 +56,10 @@ class Battle:
             self.in_battle = self.player_in_battle(current_location, player)
 
     @staticmethod
-    def print_battle_stats(current_location, player):
-        print(f'\n{player.get_actor_name().upper()} STATS:\nAttack Points - {player.attack_points}\n'
+    def print_battle_stats(current_location, player) -> None:
+        print(f'\n{player.name.upper()} STATS:\nAttack Points - {player.attack_points}\n'
               f'Health Points - {player.health_points}\nDefend Points - {player.defend_points}\n\n'
-              f'{current_location.enemy.get_actor_name().upper()} STATS:\nAttack Points - '
+              f'{current_location.enemy.name.upper()} STATS:\nAttack Points - '
               f'{current_location.enemy.attack_points}\nHealth Points - {current_location.enemy.health_points}\n')
 
     def set_battle_stats(self, current_location, player):
@@ -89,7 +89,7 @@ class Battle:
         self.print_battle_stats(current_location, player)
         sleep(2)
 
-    def battle(self, current_location, last_direction: str, player):
+    def battle(self, current_location, last_direction: str, player) -> None:
         """
         Main battle method.
         :param current_location: Cell instance, the players current location
@@ -114,7 +114,7 @@ class Battle:
                 case _:
                     print('I don\'t understand!')
 
-    def escape_battle(self, last_direction: str, player):
+    def escape_battle(self, last_direction: str, player) -> None:
         """
         Method to escape the battle
         :param last_direction: str, the direction where the player came from
@@ -134,5 +134,5 @@ class Battle:
             case 'west':
                 opposite_direction = 'east'
 
-        player.go(opposite_direction)
+        player.move(opposite_direction)
         print(f'You escaped back {opposite_direction}')

@@ -1,5 +1,5 @@
 class Inventory:
-    def __init__(self):
+    def __init__(self) -> None:
         self.pouch = []
         self.max_limit = 3
         self.right_hand = None
@@ -17,24 +17,24 @@ class Inventory:
         :param hand: str, the hand to pick up with
         :return: bool
         """
-        if item.__dict__['storage'] == 'pouch' and len(self.pouch) >= self.max_limit:
+        if item['storage'] == 'pouch' and len(self.pouch) >= self.max_limit:
             print(f'Your pouch is full.\n'
                   f'You can\'t pick up {item["description"]} before you drop something from your pouch!')
             return True
-        elif item.__dict__['storage'] == 'hand' and hand:
+        elif item['storage'] == 'hand' and hand:
             if self.left_hand and self.right_hand:
                 print(f'Your hands are full.\n'
-                      f'You can\'t pick up {item.__dict__["description"]} before you drop something from your hands!')
+                      f'You can\'t pick up {item["description"]} before you drop something from your hands!')
                 return True
             match hand:
                 case 'left' | 'left hand':
                     if self.left_hand:
-                        print(f'Your left hand is full!\nBut you can pick the {item.__dict__["description"]} '
+                        print(f'Your left hand is full!\nBut you can pick the {item["description"]} '
                               f'up with your right hand or drop the item in your left hand.')
                         return True
                 case 'right' | 'right hand':
                     if self.right_hand:
-                        print(f'Your right hand is full!\nBut you can pick the {item.__dict__["description"]} '
+                        print(f'Your right hand is full!\nBut you can pick the {item["description"]} '
                               f'up with your left hand or drop the item in your right hand.')
                         return True
                 case _:
@@ -64,7 +64,7 @@ class Inventory:
 
         return False
 
-    def process_item_pickup(self, item, current_location, chest=None):
+    def process_item_pickup(self, item, current_location, chest=None) -> None:
         """
         Process the pickup method
         :param item: Item instance, the item to pick up
@@ -72,38 +72,38 @@ class Inventory:
         :param chest: Item instance
         :return None
         """
-        if 'get' not in item.__dict__['actions']:
-            print(f'It seems impossible to pick up the {item.__dict__["description"]}')
+        if 'get' not in item['actions']:
+            print(f'It seems impossible to pick up the {item["description"]}')
 
-        elif item.__dict__['storage'] == 'pouch' and not self.inventory_full(item):
-            print(f'You pick up the {item.__dict__["description"]}!')
+        elif item['storage'] == 'pouch' and not self.inventory_full(item):
+            print(f'You pick up the {item["description"]}!')
             self.pouch.append(item)
 
             if chest:
-                chest.__dict__['contains'].remove(item)
+                chest['contains'].remove(item)
             else:
                 current_location.item = None
                 current_location.got_item = False
 
-        elif item.__dict__['storage'] == 'hand':
-            hand = input(f'Which hand do you want to pick up the {item.__dict__["description"]} with?\n>> ')
+        elif item['storage'] == 'hand':
+            hand = input(f'Which hand do you want to pick up the {item["description"]} with?\n>> ')
 
             if not self.inventory_full(item, hand):
-                print(f'You pick up the {item.__dict__["description"]} in your {hand} hand!')
+                print(f'You pick up the {item["description"]} in your {hand} hand!')
                 if hand == 'right' or hand == 'right hand':
                     self.right_hand = item
                 elif hand == 'left' or hand == 'left hand':
                     self.left_hand = item
 
                 if chest:
-                    chest.__dict__['contains'].remove(item)
+                    chest['contains'].remove(item)
                 else:
                     current_location.item = None
                     current_location.got_item = False
         else:
             print('Your inventory is full!')
 
-    def print_inventory(self):
+    def print_inventory(self) -> None:
         """
         Display the players inventory
         return: None
@@ -115,26 +115,26 @@ class Inventory:
             if len(self.pouch) == 0:
                 print('Your pouch is empty\n')
             else:
-                for item in sorted(self.pouch, key=lambda i: i.__dict__['description']):
-                    print(f'* {item.__dict__["description"]}')
+                for item in sorted(self.pouch, key=lambda i: i['description']):
+                    print(f'* {item["description"]}')
                 print()
 
             if self.right_hand:
-                print(f'Right hand:  {self.right_hand.__dict__["description"]}')
+                print(f'Right hand:  {self.right_hand["description"]}')
             else:
                 print(f'Right hand:  {self.right_hand}')
 
             if self.left_hand:
-                print(f'Left hand:  {self.left_hand.__dict__["description"]}')
+                print(f'Left hand:  {self.left_hand["description"]}')
             else:
                 print(f'Left hand:  {self.left_hand}')
 
-    def remove_pouch_item(self, label: str):
+    def remove_pouch_item(self, label: str) -> None:
         """
         Remove an item from the pouch, if it's a consumable item (Health potion etc.)
         :param label: str, the item label
         return: None
         """
         for item in self.pouch:
-            if label == item.__dict__['label']:
+            if label == item['label']:
                 self.pouch.remove(item)

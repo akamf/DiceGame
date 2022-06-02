@@ -4,10 +4,10 @@ from unittest.mock import patch
 from src.assets import Enemy
 from src.assets import Player
 from src.assets import Item
-from src.database.data import enemies
-from src.database.data import usable_items, key_items
+from src.db.data import enemies
+from src.db.data import usable_items, key_items
 from src.assets.map import Cell
-from src.level import Level
+from src.assets.level import Level
 
 
 class TestItemFunctions(unittest.TestCase):

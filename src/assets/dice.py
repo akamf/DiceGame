@@ -3,7 +3,7 @@ from time import sleep
 
 
 class Dice:
-    def __init__(self):
+    def __init__(self) -> None:
         self.dice = [
             'sword',
             'sword',
@@ -13,7 +13,7 @@ class Dice:
             'double shield'
         ]
 
-    def roll_dices(self, num_of_dices: int) -> list:
+    def roll_dices(self, num_of_dices: int) -> list[str]:
         """
         Method to simulate the dices results
         :param num_of_dices: int, number of dices to roll

@@ -2,7 +2,7 @@
 venv/
 __pycache__/
 maze.svg
-src/assets/high_scores/high_scores.taf
+src/assets/high_score/high_scores.taf
 .env
 /src/docker
 
