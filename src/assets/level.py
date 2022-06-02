@@ -20,7 +20,7 @@ class Level:
     def __init__(self, level: int, maze_size: tuple, player) -> None:
         self.battle = None
         self.level_complete = False
-        self.enemies = {Enemy(level, **random.choice(controller.get_all_enemies())) for _ in range(maze_size[0])}
+        self.enemies = [Enemy(level, **random.choice(controller.get_all_enemies())) for _ in range(maze_size[0])]
         self.maze = Maze(*maze_size, self.level_items(), self.enemies)
         self.player = player
 
@@ -35,7 +35,7 @@ class Level:
                   f' remain. You will also gain some extra health points for your journey. Good luck!\n')
 
     @staticmethod
-    def level_items() -> set:
+    def level_items() -> list:
         """
         Method to set which items to appear in the maze
         :return: set
@@ -43,7 +43,7 @@ class Level:
         items = [Item(**item) for item in controller.get_all_items_from_type('usable item')]
         level_items = {random.choice(items) for _ in range(3)}
         level_items.update({Item(**item) for item in controller.get_all_items_from_type('key item')})
-        return level_items
+        return list(level_items)
 
     def process_user_input(self) -> None:
         """
@@ -61,7 +61,7 @@ class Level:
                     if direction == i[0]:
                         came_from = i[1]
                         break
-                self.player.go(direction)
+                self.player.move(direction)
                 self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')

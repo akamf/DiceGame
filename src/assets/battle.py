@@ -134,5 +134,5 @@ class Battle:
             case 'west':
                 opposite_direction = 'east'
 
-        player.go(opposite_direction)
+        player.move(opposite_direction)
         print(f'You escaped back {opposite_direction}')

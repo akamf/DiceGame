@@ -3,9 +3,9 @@ from abc import ABC
 
 class Actor(ABC):
     """Base class for Player and Enemy"""
-    def __init__(self, name: str, pos: tuple, attack_points: int, defend_points: int, health_points: int, level: int) -> None:
+    def __init__(self, name: str, position: tuple, attack_points: int, defend_points: int, health_points: int, level: int) -> None:
         self.__name = name
-        self.__position = ActorPosition(*pos)
+        self.__position = ActorPosition(*position)
         self.attack_points = attack_points
         self.defend_points = defend_points
         self.health_points = health_points

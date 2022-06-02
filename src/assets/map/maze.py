@@ -16,7 +16,6 @@ WALL_SEPARATES = {
 
 
 class Cell:
-
     def __init__(self, x, y):
         self.x, self.y = x, y
         self.walls = {
@@ -119,7 +118,7 @@ class Maze:
             current_cell = next_cell
             created_cells += 1
 
-    def generate_locations(self, items: set, enemies: set) -> list[tuple]:
+    def generate_locations(self, items: list, enemies: list) -> list[tuple]:
         """
         Method to generate random locations for items and enemies
         :param items: set, items for the current maze
@@ -135,7 +134,7 @@ class Maze:
 
         return locations
 
-    def set_item_and_enemies_in_location(self, locations: list, items: set, enemies: set) -> None:
+    def set_item_and_enemies_in_location(self, locations: list, items: list, enemies: list) -> None:
         """
         Method to set items and enemies at their new locations
         :param locations: list, valid locations

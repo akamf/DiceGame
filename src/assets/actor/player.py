@@ -8,7 +8,7 @@ class Player(Actor):
     def __init__(self) -> None:
         super().__init__(
             name='player',
-            pos=(0, 0),
+            position=(0, 0),
             attack_points=0,
             defend_points=0,
             health_points=20,
@@ -18,7 +18,7 @@ class Player(Actor):
         self.inventory = Inventory()
         self.alive = True
 
-    def go(self, direction: str) -> None:
+    def move(self, direction: str) -> None:
         """
         Update player position, based on a constant value from DIRECTIONS
         :param direction: str,
