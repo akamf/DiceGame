@@ -1,5 +1,6 @@
+import random
 from time import sleep
-from src.assets.dice import Dice
+from src.assets.actor.player import Dice
 
 
 class Battle:
@@ -73,7 +74,7 @@ class Battle:
         player.defend_points = 0
 
         print('\nYou roll the following dices:')
-        for dice in self.dice.roll_dices(4 if player.inventory.item_in_inventory('dice') else 3):
+        for dice in player.roll_dices():
             print(f'* {dice.upper()}')
             match dice:
                 case 'shield':
@@ -136,3 +137,33 @@ class Battle:
 
         player.move(opposite_direction)
         print(f'You escaped back {opposite_direction}')
+
+
+def use_item(player, label: str, enemy):
+    """
+    Method to use items in a battle situation
+    :param player: Player obj, current player
+    :param label: str, the label of the item
+    :param enemy: Enemy instance, current enemy
+    :return: None
+    """
+    if player.inventory.item_in_inventory(label):
+        match label:
+            case 'potion':
+                print(f'You drank the health potion and gained 10 health points!')
+                player.health_points += 10
+                player.inventory.remove_pouch_item(label)
+
+            case 'pill':
+                effect = random.choice(['cursed', 'lucky'])
+                print(f'You consume the dark pill and you\'re {effect}!')
+                player.inventory.remove_pouch_item(label)
+
+                match effect:
+                    case 'lucky':
+                        print('You gain 15 health points!')
+                        player.health_points += 15
+                    case 'cursed':
+                        print(f'You faint for a moment and the {enemy.name} takes advantage!\n'
+                              f'You lose {enemy.attack_points} health points!')
+                        player.health_points -= enemy.attack_points

@@ -62,14 +62,15 @@ class Level:
                         came_from = i[1]
                         break
                 self.player.move(direction)
-                self.engaged_in_battle(direction)
+                if self.player.in_battle(self.maze.get_cell(*self.player.position)):
+                    self.engaged_in_battle(direction)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
             case ['get', item]:
-                self.player.pick_up_item(item, current_location)
+                self.player.inventory.pick_up_item(item, current_location)
             case ['drop', item]:
-                self.player.drop_item(item, current_location)
+                self.player.inventory.drop_item(item, current_location)
             case ['check', item]:
                 if current_location.item and 'check' in current_location.item.__dict__['actions']:
                     print(f'You look at the {item}\nIt\'s a {current_location.item.__dict__["description"]}')
@@ -123,7 +124,7 @@ class Level:
             command = input('>> ')
             match command.lower().split():
                 case ['get', item]:
-                    self.player.pick_up_item(item, self.maze.get_cell(*self.player.position), chest)
+                    self.player.inventory.pick_up_item(item, self.maze.get_cell(*self.player.position), chest)
                 case ['close'] | ['close', 'chest']:
                     print(f'You close the {chest.__dict__["description"]}')
                     chest.__dict__['open'] = False

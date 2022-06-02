@@ -30,7 +30,7 @@ class Game:
             self.maze_size = self.maze_size
             self.level = Level(self.current_level, self.maze_size, self.player)
             self.level.run_level()
-            self.player.update_player_stats()
+            self.player.update_stats()
 
     def check_high_score(self) -> None:
         self.high_score_board = HighScoreBoard()

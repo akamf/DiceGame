@@ -12,7 +12,7 @@ class Inventory:
 
     def inventory_full(self, item, hand=None) -> bool:
         """
-        Method to check whether or not the inventory is full
+        Method to check whether the inventory is full
         :param item: Item instance, the item to pick up
         :param hand: str, the hand to pick up with
         :return: bool
@@ -41,6 +41,51 @@ class Inventory:
                     print('Invalid command')
                     return True
         return False
+
+    def pick_up_item(self, label: str, current_location, chest=None) -> None:
+        """
+        Pick up an item from the current location, or from a chest, and append it to the players inventory
+        :param label: str, label of the item to get
+        :param current_location: Cell instance, the players current location
+        :param chest: Item instance, chest to get an item from
+        :return None
+        """
+        if chest:
+            for item in chest.__dict__['contains']:
+                if label == item.__dict__['label']:
+                    self.process_item_pickup(item.__dict__, current_location, chest)
+                else:
+                    print(f'There is no {label} in the chest')
+
+        elif not current_location.item or label != current_location.item.__dict__['label']:
+            print(f'There is no {label} here')
+
+        elif label == current_location.item.__dict__['label']:
+            self.process_item_pickup(current_location.item.__dict__, current_location)
+
+    def drop_item(self, label: str, current_location) -> None:
+        """
+        Drop an item from the players inventory
+        :param label: str, the label of the item to drop
+        :param current_location: Cell instance, the players current location
+        :return None
+        """
+        found_item = None
+        if not current_location.got_item:
+            for item in self.pouch:
+                if label == item.__dict__['label']:
+                    found_item = item
+                    break
+        else:
+            print(f'This space isn\'t empty! You can\'t drop the {label}')
+
+        if found_item and 'drop' in found_item.__dict__['actions']:
+            print(f'You drop the {label}')
+            self.pouch.remove(found_item)
+            current_location.item = found_item
+            current_location.got_item = True
+        else:
+            print(f'You can\'t drop the {label}, you should have thought of this earlier')
 
     def item_in_inventory(self, label: str) -> bool:
         """
@@ -138,3 +183,4 @@ class Inventory:
         for item in self.pouch:
             if label == item['label']:
                 self.pouch.remove(item)
+
