@@ -4,27 +4,35 @@ from src.assets.level import Level
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         self.player = Player()
         self.level = None
         self.current_level = 0
-        self.maze_size = (5, 5)
+        self.__maze_size = (5, 5)
         self.high_score_board = None
 
-    def run(self):
+    @property
+    def maze_size(self) -> tuple:
+        if self.current_level % 5 == 0:
+            return self.__maze_size[0] + 2, self.__maze_size[1] + 2
+        return self.__maze_size
+
+    @maze_size.setter
+    def maze_size(self, s: tuple) -> None:
+        if self.current_level % 5 == 0:
+            self.__maze_size = (s[0] + 2, s[1] + 2)
+        else:
+            self.__maze_size = s
+
+    def run(self) -> None:
         while self.player.alive:
             self.current_level += 1
-            self.maze_size = self.update_maze_size()
+            self.maze_size = self.maze_size
             self.level = Level(self.current_level, self.maze_size, self.player)
             self.level.run_level()
             self.player.update_player_stats()
 
-    def update_maze_size(self) -> tuple:
-        if self.current_level % 5 == 0:
-            return self.maze_size[0] + 2, self.maze_size[1] + 2
-        return self.maze_size
-
-    def check_high_score(self):
+    def check_high_score(self) -> None:
         self.high_score_board = HighScoreBoard()
         self.high_score_board.load_high_score()
         self.high_score_board.update_high_score(input('Enter your name to save your score:\n>> '), self.player.score)

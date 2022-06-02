@@ -7,15 +7,15 @@ DIRECTIONS = [
     ('east', (1, 0)),
     ('west', (-1, 0))
 ]
+WALL_SEPARATES = {
+    'north': 'south',
+    'south': 'north',
+    'east': 'west',
+    'west': 'east'
+}
 
 
 class Cell:
-    WALL_SEPARATES = {
-        'north': 'south',
-        'south': 'north',
-        'east': 'west',
-        'west': 'east'
-    }
 
     def __init__(self, x, y):
         self.x, self.y = x, y
@@ -40,7 +40,7 @@ class Cell:
         return: None
         """
         self.walls[wall] = False
-        other_cell.walls[Cell.WALL_SEPARATES[wall]] = False
+        other_cell.walls[WALL_SEPARATES[wall]] = False
 
     def set_item(self, items: list):
         """
@@ -74,15 +74,15 @@ class Maze:
         self.set_item_and_enemies_in_location(self.generate_locations(items, enemies), items, enemies)
         write_map(self, 'maze')
 
-    def get_cell(self, x: int, y: int):
+    def get_cell(self, x: int, y: int) -> Cell:
         return self.maze[x][y]
 
-    def get_valid_neighbours(self, cell: Cell):
+    def get_valid_neighbours(self, cell: Cell) -> list[tuple]:
         """
         Checks the current cells neighbours by decrement or increment it's x and y value
         If the neighbouring cell is inside the map, it appends to the neighbour list
         :param cell: Cell instance, current cell
-        :return: list
+        :return: list[tuple], list of neighbours
         """
         neighbours = []
 
@@ -95,7 +95,7 @@ class Maze:
 
         return neighbours
 
-    def create_maze(self):
+    def create_maze(self) -> None:
         """
         The method checks the neighbouring cells and moves in random direction by removing the wall between the current
         and the next cell. If the neighbouring cell is a dead end, it backtracks to the last "unvisited" neighbour
@@ -119,12 +119,12 @@ class Maze:
             current_cell = next_cell
             created_cells += 1
 
-    def generate_locations(self, items: set, enemies: set) -> list:
+    def generate_locations(self, items: set, enemies: set) -> list[tuple]:
         """
         Method to generate random locations for items and enemies
         :param items: set, items for the current maze
         :param enemies: set, enemies in the current maze
-        :return: list
+        :return: list[tuple], locations for items and enemies
         """
         locations = []
         for _ in range(len(enemies) + len(items)):
@@ -135,7 +135,7 @@ class Maze:
 
         return locations
 
-    def set_item_and_enemies_in_location(self, locations: list, items: set, enemies: set):
+    def set_item_and_enemies_in_location(self, locations: list, items: set, enemies: set) -> None:
         """
         Method to set items and enemies at their new locations
         :param locations: list, valid locations
@@ -146,7 +146,7 @@ class Maze:
         cnt = 0
 
         for enemy in enemies:
-            enemy.set_actor_position(locations[cnt])
+            enemy.position = locations[cnt]
             enemy.pos = locations[cnt]
             cnt += 1
 

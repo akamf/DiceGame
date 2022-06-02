@@ -5,22 +5,30 @@ from src.assets.map.maze import DIRECTIONS
 
 
 class Player(Actor):
-    def __init__(self):
-        super().__init__('player', (0, 0), 0, 0, 20, 1)
+    def __init__(self) -> None:
+        super().__init__(
+            name='player',
+            pos=(0, 0),
+            attack_points=0,
+            defend_points=0,
+            health_points=20,
+            level=1
+        )
         self.score = 0
         self.inventory = Inventory()
         self.alive = True
 
-    def go(self, direction: str):
+    def go(self, direction: str) -> None:
         """
         Update player position, based on a constant value from DIRECTIONS
+        :param direction: str,
         :return None
         """
         for value in DIRECTIONS:
             if value[0] == direction:
-                self.set_actor_position(value[1])
+                self.position = value[1]
 
-    def pick_up_item(self, label: str, current_location, chest=None):
+    def pick_up_item(self, label: str, current_location, chest=None) -> None:
         """
         Pick up an item from the current location, or from a chest, and append it to the players inventory
         :param label: str, label of the item to get
@@ -31,7 +39,7 @@ class Player(Actor):
         if chest:
             for item in chest.__dict__['contains']:
                 if label == item.__dict__['label']:
-                    self.inventory.process_item_pickup(item, current_location, chest)
+                    self.inventory.process_item_pickup(item.__dict__, current_location, chest)
                 else:
                     print(f'There is no {label} in the chest')
 
@@ -39,9 +47,9 @@ class Player(Actor):
             print(f'There is no {label} here')
 
         elif label == current_location.item.__dict__['label']:
-            self.inventory.process_item_pickup(current_location.item, current_location)
+            self.inventory.process_item_pickup(current_location.item.__dict__, current_location)
 
-    def drop_item(self, label: str, current_location):
+    def drop_item(self, label: str, current_location) -> None:
         """
         Drop an item from the players inventory
         :param label: str, the label of the item to drop
@@ -89,7 +97,7 @@ class Player(Actor):
                             print('You gain 15 health points!')
                             self.health_points += 15
                         case 'cursed':
-                            print(f'You faint for a moment and the {enemy.get_actor_name()} takes advantage!\n'
+                            print(f'You faint for a moment and the {enemy.name} takes advantage!\n'
                                   f'You lose {enemy.attack_points} health points!')
                             self.health_points -= enemy.attack_points
 
@@ -98,7 +106,7 @@ class Player(Actor):
         Update player stats when the level is completed
         :return: None
         """
-        self.set_actor_position((0, 0))
+        self.position = (0, 0)
         self.inventory.pouch.clear()
         self.health_points += 10
         self.level += 1
