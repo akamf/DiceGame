@@ -5,3 +5,6 @@ maze.svg
 src/assets/high_scores/high_scores.taf
 .env
 /src/docker
+
+database_structure.txt
+ideas.txt
