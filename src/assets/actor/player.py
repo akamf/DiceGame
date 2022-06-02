@@ -1,5 +1,5 @@
 import random
-from src.assets.actors.actor import Actor
+from src.assets.actor import Actor
 from src.assets.inventory import Inventory
 from src.assets.map.maze import DIRECTIONS
 

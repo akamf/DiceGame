@@ -6,5 +6,5 @@ if __name__ == '__main__':
     load_dotenv()
     init_db()
 
-    from src.game import Game
+    from src.assets.game import Game
     Game().run()

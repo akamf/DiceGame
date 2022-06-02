@@ -10,14 +10,14 @@ class HighScoreBoard:
         self.board = []
 
     def load_high_score(self):
-        with open('high_scores.taf', 'rb') as score_file:
+        with open('high_score.taf', 'rb') as score_file:
             loaded_data = pickle.load(score_file)
 
         for line in loaded_data:
             self.board.append(line)
 
     def save_high_score(self):
-        with open('high_scores.taf', 'wb') as score_file:
+        with open('high_score.taf', 'wb') as score_file:
             pickle.dump(self.board, score_file)
 
     def update_high_score(self, player_name: str, player_score: int):

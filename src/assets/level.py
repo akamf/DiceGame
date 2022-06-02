@@ -1,9 +1,9 @@
 import random
 
-from src.assets.actors.enemy import Enemy
+from src.assets.actor.enemy import Enemy
 from src.assets.item import Item
 from src.assets.map.maze import Maze
-from src.events.battle import Battle
+from src.assets.battle import Battle
 
 import src.db.controller as controller
 
