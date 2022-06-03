@@ -1,12 +1,6 @@
 from src.assets.battle import engaged_in_battle
 from src.assets.inventory import drop_item, pick_up_item, open_chest, inspect_item
-
-OPPOSITE_DIRECTION = [
-    ('north', 'south'),
-    ('south', 'north'),
-    ('east', 'west'),
-    ('west', 'east'),
-]
+from src.assets.map.directions import OPPOSITE_DIRECTIONS
 
 
 def process_user_input(level) -> None:
@@ -21,9 +15,9 @@ def process_user_input(level) -> None:
     match command.lower().split():
         case ['go', direction] if direction in current_location.walls and not current_location.walls[direction]:
             print('You go further in the maze!')
-            for i in OPPOSITE_DIRECTION:
-                if direction == i[0]:
-                    came_from = i[1]
+            for key, value in OPPOSITE_DIRECTIONS.items():
+                if direction == key:
+                    came_from = value
                     break
             level.player.move(direction)
             current_location = level.maze.get_cell(*level.player.position)

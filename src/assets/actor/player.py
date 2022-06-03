@@ -1,6 +1,6 @@
 from src.assets.actor import Actor
 from src.assets.inventory import Inventory
-from src.assets.map.maze import DIRECTIONS
+from src.assets.map.directions import DIRECTIONS
 
 
 class Dice:
@@ -48,9 +48,9 @@ class Player(Actor):
         :param direction: str,
         :return None
         """
-        for value in DIRECTIONS:
-            if value[0] == direction:
-                self.position = value[1]
+        for key, value in DIRECTIONS.items():
+            if direction == key:
+                self.position = value
 
     @staticmethod
     def in_battle(current_location) -> bool:

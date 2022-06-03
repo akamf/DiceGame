@@ -1,18 +1,6 @@
 import random
 from src.assets.map import write_map
-
-DIRECTIONS = [
-    ('north', (0, -1)),
-    ('south', (0, 1)),
-    ('east', (1, 0)),
-    ('west', (-1, 0))
-]
-WALL_SEPARATES = {
-    'north': 'south',
-    'south': 'north',
-    'east': 'west',
-    'west': 'east'
-}
+from src.assets.map.directions import OPPOSITE_DIRECTIONS, DIRECTIONS
 
 
 class Cell:
@@ -39,7 +27,7 @@ class Cell:
         return: None
         """
         self.walls[wall] = False
-        other_cell.walls[WALL_SEPARATES[wall]] = False
+        other_cell.walls[OPPOSITE_DIRECTIONS[wall]] = False
 
     def set_item(self, items: list):
         """
@@ -85,8 +73,8 @@ class Maze:
         """
         neighbours = []
 
-        for direction, (direction_x, direction_y) in DIRECTIONS:
-            neighbour_x, neighbour_y = cell.x + direction_x, cell.y + direction_y
+        for direction, value in DIRECTIONS.items():
+            neighbour_x, neighbour_y = cell.x + value[0], cell.y + value[1]
             if 0 <= neighbour_x < self.num_of_cells_x and 0 <= neighbour_y < self.num_of_cells_y:
                 neighbour = self.get_cell(neighbour_x, neighbour_y)
                 if neighbour.surrounded_by_walls():
