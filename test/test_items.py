@@ -7,7 +7,7 @@ from src.assets import Item
 from src.db.data import enemies
 from src.db.data import usable_items, key_items
 from src.assets.map import Cell
-from src.assets.level import Level
+from src.assets.game.level import Level
 
 
 class TestItemFunctions(unittest.TestCase):

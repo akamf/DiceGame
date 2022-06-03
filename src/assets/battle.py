@@ -70,7 +70,7 @@ def escape_battle(last_direction: str, player) -> None:
     :param player: Player instance
     :return None
     """
-    from src.assets.level import OPPOSITE_DIRECTION
+    from src.assets.game.level import OPPOSITE_DIRECTION
 
     for direction in OPPOSITE_DIRECTION:
         if last_direction == direction[0]:
