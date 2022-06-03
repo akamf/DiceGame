@@ -17,6 +17,15 @@ class Dice:
     def __getitem__(self, dice_face):
         return self.dice[dice_face]
 
+    def roll(self) -> str:
+        """
+        Method to simulate the dices results
+        :return: list
+        """
+        import random
+
+        return random.choice(self.dice)
+
 
 class Player(Actor):
     def __init__(self) -> None:
@@ -30,7 +39,7 @@ class Player(Actor):
         )
         self.score = 0
         self.inventory = Inventory()
-        self.dices = [Dice()]
+        self.dices = [Dice(), Dice(), Dice(), Dice(), Dice(), Dice(), Dice(), Dice()]
         self.alive = True
 
     def move(self, direction: str) -> None:
@@ -69,13 +78,3 @@ class Player(Actor):
             self.level = 1
             self.score = 0
 
-    def roll_dices(self) -> list[str]:
-        """
-        Method to simulate the dices results
-        :return: list
-        """
-        import random
-        from time import sleep
-
-        sleep(1)
-        return [dice[random.randrange(0, 6)] for _ in range(len(self.dices)) for dice in self.dices]

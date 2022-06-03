@@ -3,7 +3,7 @@ import random
 from src.assets.actor.enemy import Enemy
 from src.assets.item import Item
 from src.assets.map.maze import Maze
-from src.assets.battle import Battle
+from src.assets.battle import engaged_in_battle
 
 import src.db.controller as controller
 
@@ -18,14 +18,13 @@ OPPOSITE_DIRECTION = [
 
 class Level:
     def __init__(self, level: int, maze_size: tuple, player) -> None:
-        self.battle = None
         self.level_complete = False
         self.enemies = [Enemy(level, **random.choice(controller.get_all_enemies())) for _ in range(maze_size[0])]
         self.maze = Maze(*maze_size, self.level_items(), self.enemies)
         self.player = player
 
     def run_level(self):
-        self.print_maze_info(None)
+        self.print_maze_info()
         while not self.level_complete and self.player.alive:
             self.process_user_input()
 
@@ -62,8 +61,11 @@ class Level:
                         came_from = i[1]
                         break
                 self.player.move(direction)
-                if self.player.in_battle(self.maze.get_cell(*self.player.position)):
-                    self.engaged_in_battle(direction)
+                current_location = self.maze.get_cell(*self.player.position)
+
+                if current_location.enemy:
+                    print('kukars skymning')
+                    engaged_in_battle(direction, self.player, current_location)
             case ['go', *bad_direction]:
                 print(f'You can\'t go in that direction: {" ".join(bad_direction)}')
 
@@ -148,19 +150,7 @@ class Level:
         else:
             return 'There is nothing to investigate here!'
 
-    def engaged_in_battle(self, direction: str) -> None:
-        """
-        Check if the player is engaged in battle after it's movement, aka if there's a enemy in the new cell
-        :param direction: str, the direction the player moved
-        :return: None
-        """
-        if self.maze.get_cell(*self.player.position).enemy:
-            print(f'You bumped into a {self.maze.get_cell(*self.player.position).enemy.name}'
-                  f'\nTime to roll those dices!\nRemember: "Each SHIELD gets you 1 defend point and '
-                  f'each SWORD gets you 1 attack point"', end='')
-            self.battle = Battle(self.maze.get_cell(*self.player.position), direction, self.player)
-
-    def print_maze_info(self, came_from: str) -> None:
+    def print_maze_info(self, came_from=None) -> None:
         if came_from:
             print(f'You came from {came_from}')
 
