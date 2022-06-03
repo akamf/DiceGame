@@ -5,7 +5,7 @@ from src.assets import Enemy
 from src.assets import Player
 from src.assets import Battle
 from src.db.data import enemies
-from src.assets.level import Level
+from src.assets.game.level import Level
 
 
 class TestBattle(unittest.TestCase):
