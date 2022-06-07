@@ -14,7 +14,7 @@ class GameLevel:
         self.complete = False
         self.difficulty = difficulty
         self.enemies = [Enemy(self.difficulty, **random.choice(controller.get_all_enemies())) for _ in range(self.maze_size[0])]
-        self.maze = Maze(*self.maze_size, self.level_items(), self.enemies)
+        self.maze = Maze(*self.maze_size, self.level_items(3), self.enemies)
         self.player = player
 
     @property
@@ -31,13 +31,13 @@ class GameLevel:
             self.__maze_size = s
 
     @staticmethod
-    def level_items() -> list:
+    def level_items(num_of_items: int) -> list:
         """
         Method to set which items to appear in the maze
         :return: set
         """
         items = [Item(**item) for item in controller.get_all_items_from_type('usable item')]
-        level_items = {random.choice(items) for _ in range(3)}
+        level_items = {random.choice(items) for _ in range(num_of_items)}
         level_items.update({Item(**item) for item in controller.get_all_items_from_type('key item')})
         return list(level_items)
 

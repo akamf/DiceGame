@@ -70,12 +70,12 @@ def escape_battle(last_direction: str, player) -> None:
     :param player: Player instance
     :return None
     """
-    from src.assets.game.level import OPPOSITE_DIRECTION
+    from src.assets.map.directions import OPPOSITE_DIRECTIONS
 
-    for direction in OPPOSITE_DIRECTION:
-        if last_direction == direction[0]:
-            player.move(direction[1])
-            print(f'You escaped back {direction[1]}')
+    for key, value in OPPOSITE_DIRECTIONS.items():
+        if last_direction == key:
+            player.move(value)
+            print(f'You escaped back {value}')
 
 
 def battle_over(current_location, player) -> bool:
