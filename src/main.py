@@ -13,7 +13,5 @@ if __name__ == '__main__':
 
     else:
         from test_environ import TestMaze
-        game = TestMaze(
-
-        )
+        game = TestMaze()
         game.run()
