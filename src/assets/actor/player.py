@@ -1,6 +1,6 @@
-from src.assets.actor import Actor
-from src.assets.inventory import Inventory
-from src.assets.map.directions import DIRECTIONS
+from assets.actor import Actor
+from assets.inventory import Inventory
+from assets.map.directions import DIRECTIONS
 
 
 class Dice:

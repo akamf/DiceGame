@@ -1,4 +1,4 @@
-from src.assets.actor import Actor
+from assets.actor import Actor
 
 
 class Enemy(Actor):

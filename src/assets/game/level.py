@@ -1,11 +1,11 @@
 import random
 
-from src.assets.actor.enemy import Enemy
-from src.assets.input import process_user_input
-from src.assets.inventory import Item
-from src.assets.map.maze import Maze
+from assets.actor.enemy import Enemy
+from assets.input import process_user_input
+from assets.inventory import Item
+from assets.map.maze import Maze
 
-import src.db.controller as controller
+import db.controller as controller
 
 
 class GameLevel:

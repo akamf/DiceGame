@@ -1,4 +1,4 @@
-import src.db.repository as repo
+import db.repository as repo
 
 
 def get_enemy(**kwargs):

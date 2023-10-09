@@ -1,5 +1,5 @@
-from src.db import db
-from src.db.model import Document
+from db import db
+from db.model import Document
 
 
 class EnemyCollection(Document):

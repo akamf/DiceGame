@@ -1,4 +1,4 @@
-from src.db.model.collections import *
+from db.model.collections import *
 
 
 def add_enemy(enemy) -> None:

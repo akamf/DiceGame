@@ -1,4 +1,4 @@
-from src.db import init_db
+from db import init_db
 from dotenv import load_dotenv
 from config import DEVELOPMENT
 
@@ -8,7 +8,7 @@ if __name__ == '__main__':
     init_db()
 
     if not DEVELOPMENT:
-        from src.assets.game import Game
+        from assets.game import Game
         Game().run()
 
     else:

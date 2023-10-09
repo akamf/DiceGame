@@ -9,3 +9,5 @@ src/assets/high_score/high_scores.taf
 database_structure.txt
 ideas.txt
 /test_environ/
+
+docker-compose.yml

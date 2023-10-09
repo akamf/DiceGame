@@ -1,6 +1,6 @@
 import random
-from src.assets.map import write_map
-from src.assets.map.directions import OPPOSITE_DIRECTIONS, DIRECTIONS
+from assets.map import write_map
+from assets.map.directions import OPPOSITE_DIRECTIONS, DIRECTIONS
 
 
 class Cell:
