@@ -1,5 +1,5 @@
-from src.assets.actor.player import Player
-from src.assets.game.level import GameLevel
+from assets.actor.player import Player
+from assets.game.level import GameLevel
 
 
 class Game:

@@ -1,6 +1,6 @@
-from src.assets.battle import engaged_in_battle
-from src.assets.inventory import drop_item, pick_up_item, open_chest, inspect_item
-from src.assets.map.directions import OPPOSITE_DIRECTIONS
+from assets.battle import engaged_in_battle
+from assets.inventory import drop_item, pick_up_item, open_chest, inspect_item
+from assets.map.directions import OPPOSITE_DIRECTIONS
 
 
 def process_user_input(level) -> None:
